@@ -105,7 +105,7 @@ def editBook(id):
     if 'price' in requestData:
         books[index]['price'] = requestData['price']
 
-    return "", 200
+    return jsonify(books[index]), 200
 
 # DELETE /books/<id>
 # curl -i http://localhost:5000/books/3 -X DELETE
