@@ -1,10 +1,3 @@
-# TODO 
-# - logging
-# - patch method
-# - authentication/authorisation (token)
-# - data validating (RequestParser)
-
-
 from flask import Flask, jsonify, abort, make_response, request
 
 app = Flask(__name__)
