@@ -92,23 +92,20 @@ def editBook(id):
 
     requestData = request.get_json()
 
-    for key, value in requestData.items():
-        print(key + '|' + str(value))
-
-    updatedBook = {
-        'id': id,
-        'namme': requestData['name'],
-        'isbn': requestData['isbn'],
-        'price': requestData['price']
-    }
-    i = 0
+    index = 0
     for book in books:
-        currentId = book['id']
-        if currentId == id:
-            book[i] = updatedBook
-        i += 1
-        
-    return jsonify(updatedBook), 200
+        if book['id'] == id:
+            break
+        index += 1
+
+    if 'name' in requestData:
+        books[index]['name'] = requestData['name']
+    if 'isbn' in requestData:
+        books[index]['isbn'] = requestData['isbn']
+    if 'price' in requestData:
+        books[index]['price'] = requestData['price']
+
+    return "", 200
 
 # DELETE /books/<id>
 # curl -i http://localhost:5000/books/3 -X DELETE
