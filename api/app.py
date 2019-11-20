@@ -80,7 +80,7 @@ def addBook():
         'isbn': request.json.get('isbn', 0),
     }
     books.append(book)
-    return jsonify({'book': book}), 201
+    return jsonify(book), 201
 
 # PATCH /books
 # curl -i http://localhost:5000/books/3 -X PATCH -H "Content-Type: application/json" -d '{"isbn": 66, "name":"Name"}' @a
