@@ -65,7 +65,7 @@ def getBookById(id):
     return jsonify(returnValue), 200
 
 # POST /books/<id>
-# curl -i http://localhost:5000/books -H "Content-Type: application/json" -X POST -d '{"isbn": 5, "name":"Name"}' 
+# curl -i http://localhost:5000/books -X POST -H "Content-Type: application/json" -d '{"isbn": 5, "name":"Name"}' 
 @app.route('/books', methods=['post'])
 def addBook():
     if not request.json:
@@ -83,7 +83,7 @@ def addBook():
     return jsonify({'book': book}), 201
 
 # PATCH /books
-# curl -i http://localhost:5000/books/3 -H "Content-Type: application/json" -X PATCH -d '{"isbn": 66, "name":"Name"}' @a
+# curl -i http://localhost:5000/books/3 -X PATCH -H "Content-Type: application/json" -d '{"isbn": 66, "name":"Name"}' @a
 @app.route('/books/<int:id>', methods=['patch'])
 def editBook(id):
     book = [book for book in books if book['id'] == id]
