@@ -35,16 +35,16 @@ def invalidBodyError(error):
 def methodNotAllowedError(error):
     return make_response(jsonify({'message': 'Method ' + request.method + ' is not allowed on ' + request.url}), 400)
 
-@app.route('/')
+@app.route('/', methods=['get'])
 def root():
-    return "Hello world"
+    return make_response(jsonify({'message': 'API-demo version 1.0'}), 200)
 
 # GET /books
 # curl -i http://localhost:5000/books
 @app.route('/books', methods=['get'])
 def getBooks():
     print('get')
-    return jsonify(books), 200
+    return make_response(jsonify(books), 200)
 
 # GET /books/<id>
 # curl -i http://localhost:5000/books/1
@@ -62,7 +62,7 @@ def getBookById(id):
     if len(returnValue) == 0:
         abort(404)
 
-    return jsonify(returnValue), 200
+    return make_response(jsonify(returnValue), 200)
 
 # POST /books/<id>
 # curl -i http://localhost:5000/books -X POST -H "Content-Type: application/json" -d '{"isbn": 5, "name":"Name"}' 
@@ -80,7 +80,7 @@ def addBook():
         'isbn': request.json.get('isbn', 0),
     }
     books.append(book)
-    return jsonify(book), 201
+    return make_response(jsonify(book), 201)
 
 # PATCH /books
 # curl -i http://localhost:5000/books/3 -X PATCH -H "Content-Type: application/json" -d '{"isbn": 66, "name":"Name"}' @a
@@ -105,7 +105,7 @@ def editBook(id):
     if 'price' in requestData:
         books[index]['price'] = requestData['price']
 
-    return jsonify(books[index]), 200
+    return make_response(jsonify(books[index]), 200)
 
 # DELETE /books/<id>
 # curl -i http://localhost:5000/books/3 -X DELETE
@@ -115,7 +115,7 @@ def deleteBook(id):
     if len(book) == 0:
         abort(404)
     books.remove(book[0])
-    return "", 200
+    return make_response("", 200)
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)  # auto-reload
