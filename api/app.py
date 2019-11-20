@@ -44,7 +44,7 @@ def root():
 @app.route('/books', methods=['get'])
 def getBooks():
     print('get')
-    return jsonify({'books': books}), 200
+    return jsonify(books), 200
 
 # GET /books/<id>
 # curl -i http://localhost:5000/books/1
