@@ -1,30 +1,36 @@
 from flask import Flask, jsonify, abort, make_response, request
 from logic import *
 
+HTTP_OK = 200
+HTTP_CREATED = 201
+HTTP_BAD_REQUEST = 400
+HTTP_NOT_FOUND = 404
+HTTP_METHOD_NOT_ALLOWED = 405
+
 app = Flask(__name__)
 
-@app.errorhandler(404)
+@app.errorhandler(HTTP_NOT_FOUND)
 def notFoundError(error):
-    return make_response(jsonify({'message': 'Not Found: ' + request.url}), 404)
+    return make_response(jsonify({'message': 'Not Found: ' + request.url}), HTTP_NOT_FOUND)
 
-@app.errorhandler(400)
+@app.errorhandler(HTTP_BAD_REQUEST)
 def invalidBodyError(error):
-    return make_response(jsonify({'message': 'Bad request'}), 400)
+    return make_response(jsonify({'message': 'Bad request'}), HTTP_BAD_REQUEST)
 
-@app.errorhandler(405)
+@app.errorhandler(HTTP_METHOD_NOT_ALLOWED)
 def methodNotAllowedError(error):
-    return make_response(jsonify({'message': 'Method ' + request.method + ' is not allowed on ' + request.url}), 400)
+    return make_response(jsonify({'message': 'Method ' + request.method + ' is not allowed on ' + request.url}), HTTP_METHOD_NOT_ALLOWED)
 
 # GET /
 @app.route('/', methods=['get'])
 def root():
-    return make_response(jsonify({'message': 'API-demo version 1.0'}), 200)
+    return make_response(jsonify({'message': 'API-demo version 1.0'}), HTTP_OK)
 
 # GET /books
 # curl -i http://localhost:5000/books
 @app.route('/books', methods=['get'])
 def getBooks():
-    return make_response(jsonify(getAllBookslogic()), 200)
+    return make_response(jsonify(getAllBookslogic()), HTTP_OK)
 
 # GET /books/<id>
 # curl -i http://localhost:5000/books/1
@@ -32,17 +38,17 @@ def getBooks():
 def getBookById(id):
     book = getBookByIdLogic(id)
     if len(book) == 0:
-        abort(404)
-    return make_response(jsonify(book), 200)
+        abort(HTTP_NOT_FOUND)
+    return make_response(jsonify(book), HTTP_OK)
 
 # POST /books/<id>
 # curl -i http://localhost:5000/books -X POST -H "Content-Type: application/json" -d '{"isbn": 5, "name":"Name"}' 
 @app.route('/books', methods=['post'])
 def addBook():
     if not request.json:
-        abort(400)
+        abort(HTTP_BAD_REQUEST)
     if not 'isbn' in request.json:
-        abort(400)
+        abort(HTTP_BAD_REQUEST)
 
     newBookData = {
         'name': request.json['name'],
@@ -50,7 +56,7 @@ def addBook():
         'isbn': request.json.get('isbn', 0),
     }
     newBook = addBookLogic(newBookData)
-    return make_response(jsonify(newBook), 201)
+    return make_response(jsonify(newBook), HTTP_CREATED)
 
 # PATCH /books/<id>
 # curl -i http://localhost:5000/books/3 -X PATCH -H "Content-Type: application/json" -d '{"isbn": 66, "name":"Name"}'
@@ -58,7 +64,7 @@ def addBook():
 def editBook(id):
     book = [book for book in books if book['id'] == id]
     if len(book) == 0:
-        abort(404)
+        abort(HTTP_NOT_FOUND)
 
     requestData = request.get_json()
 
@@ -72,7 +78,7 @@ def editBook(id):
 
     editBookLogic(id, updatedBook)
 
-    return make_response(jsonify(updatedBook), 200)
+    return make_response(jsonify(updatedBook), HTTP_OK)
 
 # DELETE /books/<id>
 # curl -i http://localhost:5000/books/3 -X DELETE
@@ -80,9 +86,9 @@ def editBook(id):
 def deleteBook(id):
     book = [book for book in books if book['id'] == id]
     if len(book) == 0:
-        abort(404)
+        abort(HTTP_NOT_FOUND)
     deleteBookLogic(id)
-    return make_response("", 200)
+    return make_response("", HTTP_OK)
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)  # auto-reload
