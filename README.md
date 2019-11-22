@@ -10,3 +10,6 @@ TODO
 - testing
   - curl/bash (api)
   - python test-framework (unittest/api)
+- frontend
+  - simple: flask
+  - angular
