@@ -8,7 +8,6 @@ TODO
 - database persistence SQLAlchemy/SQLite
 - logic: exceptions, bubbling to controller
 - testing
-  - curl/bash (api)
   - python test-framework (unittest/api)
 - frontend
   - simple: flask
