@@ -22,19 +22,20 @@ def methodNotAllowedError(error):
     return make_response(jsonify({'message': 'Method ' + request.method + ' is not allowed on ' + request.url}), HTTP_METHOD_NOT_ALLOWED)
 
 # GET /
-@app.route('/', methods=['get'])
+# curl -i http://localhost:5000
+@app.route('/', methods=['GET'])
 def root():
     return make_response(jsonify({'message': 'API-demo version 1.0'}), HTTP_OK)
 
 # GET /books
 # curl -i http://localhost:5000/books
-@app.route('/books', methods=['get'])
+@app.route('/books', methods=['GET'])
 def getBooks():
     return make_response(jsonify(getAllBookslogic()), HTTP_OK)
 
 # GET /books/<id>
 # curl -i http://localhost:5000/books/1
-@app.route('/books/<int:id>', methods=['get'])
+@app.route('/books/<int:id>', methods=['GET'])
 def getBookById(id):
     book = getBookByIdLogic(id)
     if len(book) == 0:
@@ -43,7 +44,7 @@ def getBookById(id):
 
 # POST /books/<id>
 # curl -i http://localhost:5000/books -X POST -H "Content-Type: application/json" -d '{"isbn": 5, "name":"Name"}' 
-@app.route('/books', methods=['post'])
+@app.route('/books', methods=['POST'])
 def addBook():
     if not request.json:
         abort(HTTP_BAD_REQUEST)
@@ -60,8 +61,11 @@ def addBook():
 
 # PATCH /books/<id>
 # curl -i http://localhost:5000/books/3 -X PATCH -H "Content-Type: application/json" -d '{"isbn": 66, "name":"Name"}'
-@app.route('/books/<int:id>', methods=['patch'])
+@app.route('/books/<int:id>', methods=['PATCH'])
 def editBook(id):
+    if not request.json:
+        abort(HTTP_BAD_REQUEST)
+
     book = [book for book in books if book['id'] == id]
     if len(book) == 0:
         abort(HTTP_NOT_FOUND)
@@ -82,7 +86,7 @@ def editBook(id):
 
 # DELETE /books/<id>
 # curl -i http://localhost:5000/books/3 -X DELETE
-@app.route('/books/<int:id>', methods=['delete'])
+@app.route('/books/<int:id>', methods=['DELETE'])
 def deleteBook(id):
     book = [book for book in books if book['id'] == id]
     if len(book) == 0:

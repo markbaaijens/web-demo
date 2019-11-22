@@ -6,7 +6,9 @@ TODO
 - authentication/authorisation (token)
 - data validating (RequestParser)
 - database persistence SQLAlchemy/SQLite
-- split app => controller/logic
 - testing
   - curl/bash (api)
   - python test-framework (unittest/api)
+- frontend
+  - simple: flask
+  - angular
