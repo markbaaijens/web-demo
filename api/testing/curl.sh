@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO Debug parameter debug=1
+
 run_test() {
     result=$($2 | grep "$3") 
     if [ "$result" != "" ]
