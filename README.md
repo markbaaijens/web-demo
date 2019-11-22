@@ -6,6 +6,7 @@ TODO
 - authentication/authorisation (token)
 - data validating (RequestParser)
 - database persistence SQLAlchemy/SQLite
+- logic: exceptions, bubbling to controller
 - testing
   - curl/bash (api)
   - python test-framework (unittest/api)
