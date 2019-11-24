@@ -33,7 +33,7 @@ run_test "$title" "$test_cmd" "$test_value"
 
 if [ "$result" == "" ]
 then
-    echo "Check environment is in initial state => Error => Exit"
+    echo "Environment is not in initial state => Exit"
     exit 1
 fi
 
