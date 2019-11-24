@@ -79,8 +79,10 @@ def editBook(id):
         updatedBook['isbn'] = requestData['isbn']
     if 'price' in requestData:
         updatedBook['price'] = requestData['price']
-
-    editBookLogic(id, updatedBook)
+    try:
+        editBookLogic(id, updatedBook) 
+    except Exception as e:
+        return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
 
     return make_response(jsonify(updatedBook), HTTP_OK)
 

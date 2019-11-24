@@ -1,5 +1,7 @@
 from model import *
 
+EXCEPTION_FIELD_ISBN_IS_REQUIRED =  'EXCEPTION_FIELD_ISBN_IS_REQUIRED'
+
 def getAllBookslogic():
     return books
 
@@ -29,6 +31,8 @@ def editBookLogic(id, updatedBook):
     if 'name' in updatedBook:
         books[index]['name'] = updatedBook['name']
     if 'isbn' in updatedBook:
+        if updatedBook['isbn'] == 0:
+            raise Exception(EXCEPTION_FIELD_ISBN_IS_REQUIRED)
         books[index]['isbn'] = updatedBook['isbn']
     if 'price' in updatedBook:
         books[index]['price'] = updatedBook['price']
