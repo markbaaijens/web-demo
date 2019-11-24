@@ -31,13 +31,22 @@ def root():
 # curl -i http://localhost:5000/books
 @app.route('/books', methods=['GET'])
 def getBooks():
-    return make_response(jsonify(getAllBookslogic()), HTTP_OK)
+    try:
+        books = getAllBookslogic()
+    except Exception as e:
+        return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
+
+    return make_response(jsonify(books), HTTP_OK)
 
 # GET /books/<id>
 # curl -i http://localhost:5000/books/1
 @app.route('/books/<int:id>', methods=['GET'])
 def getBookById(id):
-    book = getBookByIdLogic(id)
+    try:
+        book = getBookByIdLogic(id)
+    except Exception as e:
+        return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
+    
     if len(book) == 0:
         abort(HTTP_NOT_FOUND)
     return make_response(jsonify(book), HTTP_OK)
