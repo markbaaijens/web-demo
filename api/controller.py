@@ -56,7 +56,12 @@ def addBook():
         'price': request.json.get('price', 0),
         'isbn': request.json.get('isbn', 0),
     }
-    newBook = addBookLogic(newBookData)
+
+    try:
+        newBook = addBookLogic(newBookData)
+    except Exception as e:
+        return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
+    
     return make_response(jsonify(newBook), HTTP_CREATED)
 
 # PATCH /books/<id>

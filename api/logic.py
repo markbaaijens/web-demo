@@ -10,6 +10,8 @@ def getBookByIdLogic(id):
     return book
 
 def addBookLogic(newBookData):
+    if newBookData['isbn'] == 0:
+        raise Exception(EXCEPTION_FIELD_ISBN_IS_REQUIRED)
 
     newBook = {
         'id': books[-1]['id'] + 1, 
