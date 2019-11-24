@@ -98,7 +98,11 @@ def deleteBook(id):
     book = [book for book in books if book['id'] == id]
     if len(book) == 0:
         abort(HTTP_NOT_FOUND)
-    deleteBookLogic(id)
+
+    try:
+        deleteBookLogic(id)
+    except Exception as e:
+        return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)        
     return make_response("", HTTP_OK)
 
 if __name__ == '__main__':
