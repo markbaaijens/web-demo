@@ -8,6 +8,8 @@
 #
 debug=0  # Set to 1 to show curl-statements
 
+result=""
+
 run_test() {
     result=$($2 -s | grep "$3") 
     if [ "$result" != "" ]
@@ -23,6 +25,18 @@ run_test() {
     fi
 }
 
+# GET /books (check for initial state)
+title="GET /books (check for initial state)"
+test_cmd="curl -i http://localhost:5000/books"
+test_value="Content-Length: 246"
+run_test "$title" "$test_cmd" "$test_value"
+
+if [ "$result" == "" ]
+then
+    echo "Check environment is in initial state => Error => Exit"
+    exit 1
+fi
+
 # GET /
 title="GET /"
 test_cmd="curl -i http://localhost:5000"
@@ -33,20 +47,10 @@ test_cmd="curl -i http://localhost:5000"
 test_value="HTTP/1.0 200 OK"
 run_test "$title" "$test_cmd" "$test_value"
 
-# PATCH /
-title="PATCH /"
-test_cmd="curl -i http://localhost:5000 -X PATCH"
-test_value="HTTP/1.0 405 METHOD NOT ALLOWED"
-run_test "$title" "$test_cmd" "$test_value"
-
 # GET /books
 title="GET /books"
 test_cmd="curl -i http://localhost:5000/books"
 test_value="HTTP/1.0 200 OK"
-run_test "$title" "$test_cmd" "$test_value"
-
-test_cmd="curl -i http://localhost:5000/books"
-test_value="Content-Length: 246"
 run_test "$title" "$test_cmd" "$test_value"
 
 # GET /books/1"
@@ -105,4 +109,10 @@ run_test "$title" "$test_cmd" "$test_value"
 title="POST /books (empty body)"
 test_cmd="curl -i http://localhost:5000/books -X POST"
 test_value="HTTP/1.0 400 BAD REQUEST"
+run_test "$title" "$test_cmd" "$test_value"
+
+# PATCH / (method not allowed)
+title="PATCH /"
+test_cmd="curl -i http://localhost:5000 -X PATCH"
+test_value="HTTP/1.0 405 METHOD NOT ALLOWED"
 run_test "$title" "$test_cmd" "$test_value"
