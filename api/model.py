@@ -1,20 +1,14 @@
-books = [
-    {
-        'id': 1,
-        'name': 'Boek 1',
-        'price': 10,
-        'isbn': 11
-    },
-    {
-        'id': 2,
-        'name': 'Boek 2',
-        'price': 20.0,
-        'isbn': 22
-    },
-    {
-        'id': 3,
-        'name': 'Boek 3',
-        'price': 30.0,
-        'isbn': 33
-    }
-]
+class Book():
+    def __init__(self, id, name, price, isbn):
+        self.id = id
+        self.name = name
+        self.price = price
+        self.isbn = isbn
+
+books = []
+newBook = Book(1, "Boek 1", 10, 11)
+books.append(newBook.__dict__)
+newBook = Book(2, "Boek 2", 20, 22)
+books.append(newBook.__dict__)
+newBook = Book(3, "Boek 3", 30, 33)
+books.append(newBook.__dict__)
