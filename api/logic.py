@@ -1,4 +1,4 @@
-from model import *
+from model import books, saveData, readData
 
 EXCEPTION_FIELD_ISBN_IS_REQUIRED =  'EXCEPTION_FIELD_ISBN_IS_REQUIRED'
 
@@ -13,14 +13,21 @@ def addBookLogic(newBookData):
     if newBookData['isbn'] == 0:
         raise Exception(EXCEPTION_FIELD_ISBN_IS_REQUIRED)
 
+    try:   
+        # This will bounce when books is empty
+        id = books[-1]['id'] + 1
+    except:
+        id = 0
+
     newBook = {
-        'id': books[-1]['id'] + 1, 
+        'id': id, 
         'name': newBookData.get('name', ''),
         'price': newBookData.get('price', 0),
         'isbn': newBookData.get('isbn', 0),
     }
 
     books.append(newBook)
+    saveData()
     return newBook
 
 def editBookLogic(id, updatedBook):
@@ -39,6 +46,7 @@ def editBookLogic(id, updatedBook):
     if 'price' in updatedBook:
         books[index]['price'] = updatedBook['price']
 
+    saveData()
     return True    
 
 def deleteBookLogic(id):
@@ -48,4 +56,5 @@ def deleteBookLogic(id):
             break
         index += 1
     books.remove(books[index])
+    saveData()
     return True
