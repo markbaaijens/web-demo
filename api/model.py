@@ -1,5 +1,4 @@
 import json
-import os.path
 from os import path
 
 DATA_FILE_NAME = "./data/book.json"
