@@ -21,6 +21,7 @@ def addBookLogic(newBookData):
     }
 
     books.append(newBook)
+    saveData()
     return newBook
 
 def editBookLogic(id, updatedBook):
@@ -39,6 +40,7 @@ def editBookLogic(id, updatedBook):
     if 'price' in updatedBook:
         books[index]['price'] = updatedBook['price']
 
+    saveData()
     return True    
 
 def deleteBookLogic(id):
@@ -48,4 +50,5 @@ def deleteBookLogic(id):
             break
         index += 1
     books.remove(books[index])
+    saveData()
     return True

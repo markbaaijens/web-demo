@@ -115,4 +115,5 @@ def deleteBook(id):
     return make_response("", HTTP_OK)
 
 if __name__ == '__main__':
+    readData()
     app.run(port=5000, debug=True)  # auto-reload
