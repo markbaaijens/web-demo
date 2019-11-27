@@ -1,8 +1,8 @@
 import json
+import os.path
+from os import path
 
-# TODO: book.json
-# TODO: separate data-folder ./data
-DATA_FILE_NAME = "data.json"
+DATA_FILE_NAME = "./data/book.json"
 
 books = []
 
@@ -21,18 +21,19 @@ def saveData():
     return
 
 def readData():
+    if not path.exists(DATA_FILE_NAME):
+        return
+
     booksFromFile = eval(open(DATA_FILE_NAME).read())
 
-    # TODO: parse booksFromFile into newBook
-
-    newBook = {
-        'id': 1, 
-        'name': "",
-        'price': 0,
-        'isbn': 0,
-    }       
-    
-    books.append(newBook)
+    for book in booksFromFile:
+        newBook = {
+            'id': book['id'], 
+            'name': book['name'],
+            'price': book['price'],
+            'isbn': book['isbn']
+        }       
+        books.append(newBook)
 
     return
 

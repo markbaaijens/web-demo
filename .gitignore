@@ -103,4 +103,4 @@ venv.bak/
 # mypy
 .mypy_cache/
 .DS_Store
-/api/data.json
+/api/data/*.json
