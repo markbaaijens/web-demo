@@ -7,14 +7,13 @@ app = Flask(__name__)
 apiInfo = []
 
 def getApiInfo():
-    global apiInfo
     try:
         # Using eval to convert string to a dictionairy
         apiInfo = eval(requests.get('http://localhost:5000').content)
     except:
         apiInfo = []
 
-    return
+    return apiInfo
 
 # GET /
 @app.route('/', methods=['GET'])
@@ -43,5 +42,5 @@ def books():
     return render_template('books.html', title = 'Titel', api = apiInfo, books = bookList)
 
 if __name__ == '__main__':
-    getApiInfo()
+    apiInfo = getApiInfo()
     app.run(port=5001, debug=True)  # auto-reload
