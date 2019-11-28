@@ -21,5 +21,23 @@ def index():
 
     return render_template('index.html', title = 'Titel', api = apiInfo, books = bookList)
 
+# GET /books
+@app.route('/books', methods=['GET'])
+def books():
+
+    try:
+        # Using eval to convert string to a dictionairy
+        bookList = eval(requests.get('http://localhost:5000/books').content)
+    except:
+        bookList = []
+
+    try:
+        # Using eval to convert string to a dictionairy
+        apiInfo = eval(requests.get('http://localhost:5000').content)
+    except:
+        apiInfo = []
+
+    return render_template('books.html', title = 'Titel', api = apiInfo, books = bookList)
+
 if __name__ == '__main__':
     app.run(port=5001, debug=True)  # auto-reload
