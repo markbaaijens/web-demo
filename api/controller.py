@@ -27,7 +27,7 @@ def methodNotAllowedError(error):
 # curl -i http://localhost:5000
 @app.route('/', methods=['GET'])
 def root():
-    return make_response(jsonify({'message': 'API-demo version 1.0'}), HTTP_OK)
+    return make_response(jsonify({'app': 'API-demo'}, {'version': '1.0'}), HTTP_OK)
 
 # GET /books
 # curl -i http://localhost:5000/books
