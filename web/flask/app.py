@@ -3,6 +3,11 @@ import requests
 
 app = Flask(__name__)
 
+# TODO Get 1 book
+# TODO (api)/version instead of (api)/
+# TODO Implement delete (show delete-link on each item)
+# TODO Show number of books (API-call)
+
 # Globals
 apiInfo = []
 
