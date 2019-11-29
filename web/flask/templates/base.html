@@ -1,10 +1,11 @@
+<!doctype html>
 <html>
     <header>
         <title>Blog</title>
     </header>
     <body>
-        <p>API: {{ api[0].app }} version {{ api[1].version }}</p>
-        <a href="{{ webRootUrl }}">Home</a> <a href="{{ webRootUrl }}/books">Books</a>
+        <p>API = {{ api[0].app }} version {{ api[1].version }}</p>
+        <a href="/">Home</a> <a href="/books">Books</a>
         <hr>
         {% block content %}{% endblock %}    
     </body>

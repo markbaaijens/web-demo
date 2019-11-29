@@ -3,7 +3,7 @@
 {% block content %}
     <p>Books ({{ nrOfBooks }})</p>
     {% for book in books %}
-    <div><b>{{ book.name }}</b> ({{ book.id }}) <a href={{ webRootUrl }}/books/{{ book.id }}>Details</a></div>
+    <div><b>{{ book.name }}</b> ({{ book.id }}) <a href="/books/{{ book.id }}">Details</a></div>
     <div>Price: {{ book.price }}</div>
     <div>ISBN: {{ book.isbn }}</div>
     <p>
