@@ -1,6 +1,11 @@
 # web-demo
 Demo for web-app; 3-tier; rest-api written in flask/python
 
+REQUIREMENTS
+pip install flask
+pip install requests
+pip install flask-wtf
+
 TODO 
 - logging
 - authentication/authorisation (token)
