@@ -30,12 +30,25 @@ def index():
 
 # GET /books
 @app.route('/books', methods=['GET'])
-def books():
+def getBooks():
     global apiInfo
 
     try:
         # Using eval to convert string to a dictionairy
         bookList = eval(requests.get('http://localhost:5000/books').content)
+    except:
+        bookList = []
+
+    return render_template('books.html', title = 'Titel', api = apiInfo, books = bookList)
+
+# GET /books/<id>
+@app.route('/books/<int:id>', methods=['GET'])
+def getBooksById(id):
+    global apiInfo
+
+    try:
+        # Using eval to convert string to a dictionairy
+        bookList = eval(requests.get('http://localhost:5000/books' + '/' + str(id)).content)
     except:
         bookList = []
 
