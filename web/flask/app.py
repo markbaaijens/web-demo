@@ -3,9 +3,9 @@ import requests
 
 app = Flask(__name__)
 
+CONST_API_ROOT_URL = 'http://localhost:5000'
 CONST_WEB_ROOT_URL = 'http://localhost:5001'
 
-# TODO Get 1 book
 # TODO (api)/version instead of (api)/
 # TODO Implement delete (show delete-link on each item)
 # TODO Show number of books (API-call)
@@ -17,7 +17,7 @@ apiInfo = []
 def getApiInfo():
     try:
         # Using eval to convert string to a dictionairy
-        apiInfo = eval(requests.get(CONST_WEB_ROOT_URL).content)
+        apiInfo = eval(requests.get(CONST_API_ROOT_URL).content)
     except:
         apiInfo = []
 
@@ -30,12 +30,11 @@ def index():
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(CONST_WEB_ROOT_URL + '/books').content)
+        bookList = eval(requests.get(CONST_API_ROOT_URL + '/books').content)
     except:
         bookList = []
 
-    return render_template('index.html', title = 'Titel', api = apiInfo, books = bookList,
-        webRootUrl = CONST_WEB_ROOT_URL + '/books')
+    return render_template('index.html', title = 'Titel', api = apiInfo, books = bookList, webRootUrl = CONST_WEB_ROOT_URL)
 
 # GET /books
 @app.route('/books', methods=['GET'])
@@ -44,11 +43,11 @@ def getBooks():
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(CONST_WEB_ROOT_URL + '/books').content)
+        bookList = eval(requests.get(CONST_API_ROOT_URL + '/books').content)
     except:
         bookList = []
 
-    return render_template('books.html', title = 'Titel', api = apiInfo, books = bookList)
+    return render_template('books.html', title = 'Titel', api = apiInfo, books = bookList, webRootUrl = CONST_WEB_ROOT_URL)
 
 # GET /books/<id>
 @app.route('/books/<int:id>', methods=['GET'])
@@ -57,11 +56,11 @@ def getBooksById(id):
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(CONST_WEB_ROOT_URL + '/books' + '/' + str(id)).content)
+        bookList = eval(requests.get(CONST_API_ROOT_URL + '/books' + '/' + str(id)).content)
     except:
         bookList = []
 
-    return render_template('book.html', title = 'Titel', api = apiInfo, books = bookList)
+    return render_template('book.html', title = 'Titel', api = apiInfo, books = bookList, webRootUrl = CONST_WEB_ROOT_URL)
 
 if __name__ == '__main__':
     apiInfo = getApiInfo()
