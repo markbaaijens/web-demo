@@ -8,7 +8,6 @@ CONST_WEB_ROOT_URL = 'http://localhost:5001'
 
 # TODO (api)/version instead of (api)/
 # TODO Implement delete (show delete-link on each item)
-# TODO Show number of books (API-call)
 # TODO Error when page (or id) not found
 
 # Globals
@@ -34,7 +33,8 @@ def index():
     except:
         bookList = []
 
-    return render_template('index.html', title = 'Titel', api = apiInfo, books = bookList, webRootUrl = CONST_WEB_ROOT_URL)
+    return render_template('index.html', title = 'Titel', api = apiInfo, books = bookList, 
+        webRootUrl = CONST_WEB_ROOT_URL)
 
 # GET /books
 @app.route('/books', methods=['GET'])
@@ -47,7 +47,11 @@ def getBooks():
     except:
         bookList = []
 
-    return render_template('books.html', title = 'Titel', api = apiInfo, books = bookList, webRootUrl = CONST_WEB_ROOT_URL)
+    nrOfBooks = len(bookList)  # Count books client-side
+    print(nrOfBooks)
+
+    return render_template('books.html', title = 'Titel', api = apiInfo, books = bookList, 
+        webRootUrl = CONST_WEB_ROOT_URL, nrOfBooks = nrOfBooks)
 
 # GET /books/<id>
 @app.route('/books/<int:id>', methods=['GET'])
@@ -60,7 +64,8 @@ def getBooksById(id):
     except:
         bookList = []
 
-    return render_template('book.html', title = 'Titel', api = apiInfo, books = bookList, webRootUrl = CONST_WEB_ROOT_URL)
+    return render_template('book.html', title = 'Titel', api = apiInfo, books = bookList, 
+        webRootUrl = CONST_WEB_ROOT_URL)
 
 if __name__ == '__main__':
     apiInfo = getApiInfo()
