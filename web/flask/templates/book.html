@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <p>Books</p>
+    <p>Book details</p>
     {% for book in books %}
-    <div><b>{{ book.name }}</b> ({{ book.id }}) <a href={{ webRootUrl }}/books/{{ book.id }}>Link</a></div>
+    <div>Id: {{ book.id }}</div>
+    <div>Name: {{ book.name }}
     <div>Price: {{ book.price }}</div>
     <div>ISBN: {{ book.isbn }}</div>
-    <p>
     {% endfor %}
 {% endblock %}
