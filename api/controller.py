@@ -118,4 +118,6 @@ def deleteBook(id):
 
 if __name__ == '__main__':
     readData()
-    app.run(port=5000, debug=True)  # auto-reload
+    app.run(port=5000, debug=True)  # auto-reload, only localhoast
+#    app.run(host='0.0.0.0', port=5000)  # public server, reachable from remote
+
