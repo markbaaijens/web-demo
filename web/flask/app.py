@@ -100,4 +100,5 @@ def getBooksById(id):
 
 if __name__ == '__main__':
     apiInfo = getApiInfo()
-    app.run(port=5001, debug=True)  # auto-reload
+    app.run(port=5001, debug=True)  # auto-reload, only localhoast
+#    app.run(host='0.0.0.0', port=5001)  # public server, reachable from remote
