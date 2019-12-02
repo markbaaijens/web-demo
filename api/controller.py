@@ -64,9 +64,10 @@ def addBook():
 
     newBookData = {
         'name': request.json['name'],
-        'price': request.json.get('price', 0),
-        'isbn': request.json.get('isbn', 0),
+        'price': float(request.json.get('price', 0)),
+        'isbn': int(request.json.get('isbn', 0)),
     }
+    print(newBookData)
 
     try:
         newBook = addBookLogic(newBookData)
@@ -92,9 +93,9 @@ def editBook(id):
     if 'name' in requestData:
         updatedBook['name'] = requestData['name']
     if 'isbn' in requestData:
-        updatedBook['isbn'] = requestData['isbn']
+        updatedBook['isbn'] = int(requestData['isbn'])
     if 'price' in requestData:
-        updatedBook['price'] = requestData['price']
+        updatedBook['price'] = float(requestData['price'])
     try:
         editBookLogic(id, updatedBook) 
     except Exception as e:

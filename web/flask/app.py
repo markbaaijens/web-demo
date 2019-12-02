@@ -8,7 +8,6 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 # TODO (api)/version instead of (api)/
-# TODO Edit-form (flask-wtf)
 # TODO Implement delete (show delete-link on each item); delete button
 # TODO Error when page (or id) not found
 # TODO Show API-url
@@ -116,9 +115,11 @@ def addBook():
     orgBook = {
         'id': 0, 
         'name': "",
-        'price': "",
-        'isbn': ""
+        'price': 0,
+        'isbn': None
     }  
+
+    print(orgBook)
 
     form = EditBookForm()
     form.id.data = orgBook['id']
