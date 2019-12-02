@@ -28,12 +28,6 @@ def getApiInfo():
 def index():
     global apiInfo
 
-    try:
-        # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(Config.API_ROOT_URL + '/books').content)
-    except:
-        bookList = []
-
     return render_template('index.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList)
 
 # GET /books
