@@ -7,8 +7,6 @@
         <p>API = {{ api[0].app }} version {{ api[1].version }}</p>
         <a href="/">Home</a> <a href="/books">Books</a>
         <hr>
-        {% block content %}{% endblock %}    
-
         {% with messages = get_flashed_messages() %}
             {% if messages %}
             <ul>
@@ -17,6 +15,8 @@
                 {% endfor %}
             </ul>
             {% endif %}
-        {% endwith %}        
+        {% endwith %}      
+        
+        {% block content %}{% endblock %}    
     </body>
 </html>

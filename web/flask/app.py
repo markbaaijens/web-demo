@@ -68,7 +68,7 @@ def getBooksById(id):
     for book in bookList:  
         # TODO make use of a pre-defined class
         # There is one and only one book
-        oldBook = {
+        orgBook = {
             'id': book['id'], 
             'name': book['name'],
             'price': book['price'],
@@ -76,10 +76,10 @@ def getBooksById(id):
         }  
 
     form = EditBookForm()
-    form.id.data = oldBook['id']
-    form.name.data = oldBook['name']
-    form.price.data = oldBook['price']
-    form.isbn.data = oldBook['isbn']
+    form.id.data = orgBook['id']
+    form.name.data = orgBook['name']
+    form.price.data = orgBook['price']
+    form.isbn.data = orgBook['isbn']
 
     if request.method == 'POST':
         newName = request.form['name']
@@ -88,11 +88,11 @@ def getBooksById(id):
    
         updatedBook = {}
 
-        if newName.strip() != oldBook['name'].strip():
+        if newName.strip() != orgBook['name'].strip():
             updatedBook['name'] = newName
-        if str(newIsbn) != str(oldBook['isbn']):  # Convert numeric to string to have a precise comparison
+        if str(newIsbn) != str(orgBook['isbn']):  # Convert numeric to string to have a precise comparison
             updatedBook['isbn'] = newIsbn
-        if str(newPrice) != str(oldBook['price']):  # Convert numeric to string to have a precise comparison
+        if str(newPrice) != str(orgBook['price']):  # Convert numeric to string to have a precise comparison
             updatedBook['price'] = newPrice
 
         requests.patch(Config.API_ROOT_URL + '/books' + '/' + str(id), json = updatedBook)
@@ -106,7 +106,44 @@ def getBooksById(id):
             form.id.data, form.name.data))
         return redirect('/books/' + str(id))   
 
-    return render_template('book.html', title = 'Title', api = apiInfo, book = oldBook, form = form)
+    return render_template('book.html', title = 'Title', api = apiInfo, book = orgBook, form = form)
+
+# GET/POST /books/addbook
+@app.route('/books/addbook', methods=['GET', 'POST'])
+def addBook():
+    global apiInfo
+
+    orgBook = {
+        'id': 0, 
+        'name': "",
+        'price': "",
+        'isbn': ""
+    }  
+
+    form = EditBookForm()
+    form.id.data = orgBook['id']
+    form.name.data = orgBook['name']
+    form.price.data = orgBook['price']
+    form.isbn.data = orgBook['isbn']
+
+    if request.method == 'POST':   
+        updatedBook = {}
+        updatedBook['name'] = request.form['name']
+        updatedBook['isbn'] = request.form['isbn']
+        updatedBook['price'] = request.form['price']
+
+        requests.post(Config.API_ROOT_URL + '/books', json = updatedBook)
+
+        flash('Added book {}'.format(updatedBook))
+        return redirect('/books')      
+
+    if form.validate_on_submit():
+        # TODO Function validate_on_submit is never reached
+        flash('Save requested for book {}, id {}'.format(
+            form.id.data, form.name.data))
+        return redirect('/books')
+
+    return render_template('book.html', title = 'Title', api = apiInfo, book = orgBook, form = form)
 
 if __name__ == '__main__':
     apiInfo = getApiInfo()
