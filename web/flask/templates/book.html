@@ -1,11 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <p>Book details</p>
-    {% for book in books %}
-    <div>Id: {{ book.id }}</div>
-    <div>Name: {{ book.name }}
-    <div>Price: {{ book.price }}</div>
-    <div>ISBN: {{ book.isbn }}</div>
-    {% endfor %}
+    <p><h2>Book details</h2></p>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.id.label }}<br>
+            {{ form.id(size=5) }}
+        </p>
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=30) }}
+        </p>
+        <p>
+            {{ form.price.label }}<br>
+            {{ form.price(size=5) }}
+        </p>
+        <p>
+            {{ form.isbn.label }}<br>
+            {{ form.isbn(size=10) }}
+        </p>    
+        <p>{{ form.submit() }}</p>
+    </form>
 {% endblock %}

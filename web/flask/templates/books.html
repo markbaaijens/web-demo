@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <p>Books ({{ nrOfBooks }})</p>
+    <p><h2>Books ({{ nrOfBooks }})</h2></p>
     {% for book in books %}
     <div><b>{{ book.name }}</b> ({{ book.id }}) <a href="/books/{{ book.id }}">Details</a></div>
     <div>Price: {{ book.price }}</div>
