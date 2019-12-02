@@ -11,3 +11,10 @@ class EditBookForm(FlaskForm):
     price = DecimalField('Price', places=2)
     isbn = IntegerField('ISBN', validators=[DataRequired()])
     submit = SubmitField('Save')
+
+class DeleteBookForm(FlaskForm):
+    id = IntegerField('Id', render_kw={'readonly': True})
+    name = StringField('Name', render_kw={'readonly': True})
+    price = DecimalField('Price', places=2, render_kw={'readonly': True})
+    isbn = IntegerField('ISBN', render_kw={'readonly': True})
+    submit = SubmitField('Delete')

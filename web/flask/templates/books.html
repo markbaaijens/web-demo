@@ -2,10 +2,10 @@
 
 {% block content %}
     <h2>Books ({{ nrOfBooks }})</h2>
-    <a href="books/addbook">Add</href>
+    <a href="books/add">Add</a>
     <p></p>
     {% for book in books %}
-    <div><b>{{ book.name }}</b> ({{ book.id }}) <a href="/books/{{ book.id }}">Details</a></div>
+    <div><b>{{ book.name }}</b> ({{ book.id }}) - <a href="/books/{{ book.id }}">Details</a> | <a href="books/delete/{{ book.id }}">Delete</a></div>
     <div>Price: {{ book.price }}</div>
     <div>ISBN: {{ book.isbn }}</div>
     <p>
