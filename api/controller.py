@@ -83,6 +83,7 @@ def editBook(id):
     if not request.json:
         abort(HTTP_BAD_REQUEST)
 
+    # TODO Use getBookByIdLogic
     book = [book for book in books if book['id'] == id]
     if len(book) == 0:
         abort(HTTP_NOT_FOUND)
