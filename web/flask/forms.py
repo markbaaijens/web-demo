@@ -4,8 +4,8 @@ from wtforms.validators import DataRequired
 
 class EditBookForm(FlaskForm):
     # TODO Validate on length
-    # TODO Use selectorfield 
-    # TODO Make field Id readonly
+    # TODO Validate on no characters is numerical fields
+    # TODO Use selectorfield, datefield, etc.
     id = IntegerField('Id', validators=[DataRequired()], render_kw={'readonly': True})
     name = StringField('Name', validators=[DataRequired()])
     price = DecimalField('Price', places=2)

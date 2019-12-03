@@ -57,6 +57,7 @@ def getBookById(id):
 # curl -i http://localhost:5000/books -X POST -H "Content-Type: application/json" -d '{"isbn": 5, "name":"Name"}' 
 @app.route('/books', methods=['POST'])
 def addBook():
+    # TODO Facilitate minimal data
     if not request.json:
         abort(HTTP_BAD_REQUEST)
     if not 'isbn' in request.json:
@@ -67,7 +68,6 @@ def addBook():
         'price': float(request.json.get('price', 0)),
         'isbn': int(request.json.get('isbn', 0)),
     }
-    print(newBookData)
 
     try:
         newBook = addBookLogic(newBookData)

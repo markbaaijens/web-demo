@@ -1,3 +1,4 @@
+# TODO Renane to controller.py
 from flask import Flask, render_template, jsonify, request, redirect, flash
 import requests
 from config import Config
@@ -140,6 +141,7 @@ def addBook():
 # GET/POST /books/<id>
 @app.route('/books/delete/<int:id>', methods=['GET', 'POST'])
 def deleteBook(id):
+    # TODO Minimal form
     global apiInfo
 
     try:

@@ -5,6 +5,7 @@ DATA_FILE_NAME = "./data/book.json"
 
 books = []
 
+# TODO Strong typed class
 class Book():
     def __init__(self, id, name, price, isbn):
         self.id = id
