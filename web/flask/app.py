@@ -1,4 +1,5 @@
 # TODO Renane to controller.py
+# TODO Exception handling API-calls (based on return codes op calls) 
 from flask import Flask, render_template, jsonify, request, redirect, flash
 import requests
 from config import Config
