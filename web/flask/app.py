@@ -29,7 +29,7 @@ def getApiInfo():
 def index():
     global apiInfo
 
-    return render_template('index.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList)
+    return render_template('index.html', appTitle = Config.APP_TITLE, api = apiInfo)
 
 # GET /books
 @app.route('/books', methods=['GET'])
