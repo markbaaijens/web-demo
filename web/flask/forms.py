@@ -6,12 +6,6 @@ from wtforms.validators import DataRequired
 # TODO Validate on no characters is numerical fields
 # TODO Use selectorfield, datefield, etc.
 
-class ShowBookForm(FlaskForm):
-    id = IntegerField('Id', render_kw={'readonly': True})
-    name = StringField('Name', render_kw={'readonly': True})
-    price = DecimalField('Price', render_kw={'readonly': True})
-    isbn = IntegerField('ISBN', render_kw={'readonly': True})
-
 class EditBookForm(FlaskForm):
     id = IntegerField('Id', validators=[DataRequired()], render_kw={'readonly': True})
     name = StringField('Name', validators=[DataRequired()])

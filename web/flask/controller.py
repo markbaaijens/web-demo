@@ -2,7 +2,7 @@
 from flask import Flask, render_template, jsonify, request, redirect, flash
 import requests
 from config import Config
-from forms import ShowBookForm, EditBookForm, DeleteBookForm
+from forms import EditBookForm, DeleteBookForm
 
 app = Flask(__name__)
 
@@ -32,7 +32,7 @@ def index():
 
 # GET /books
 @app.route('/books', methods=['GET'])
-def getBooks():
+def listBook():
     global apiInfo
 
     try:
@@ -48,7 +48,7 @@ def getBooks():
 
 # GET/POST /books/<id>
 @app.route('/books/<int:id>', methods=['GET'])
-def getBooksById(id):
+def detailsBook(id):
     global apiInfo
 
     try:
@@ -65,15 +65,9 @@ def getBooksById(id):
             'name': book['name'],
             'price': book['price'],
             'isbn': book['isbn']
-        }  
+        }    
 
-    form = ShowBookForm()
-    form.id.data = orgBook['id']
-    form.name.data = orgBook['name']
-    form.price.data = orgBook['price']
-    form.isbn.data = orgBook['isbn']    
-
-    return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = book)
 
 # GET/POST /books/edit/<id>
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST'])

@@ -2,24 +2,21 @@
 
 {% block content %}
     <h2>{{ actionTitle }}</h2>
-    <a href="/books/edit/{{ form.id.data }}">Edit</a> | <a href="/books/delete/{{ form.id.data }}">Delete</a>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.id.label }}<br>
-            {{ form.id(size=5) }}
-        </p>
-        <p>
-            {{ form.name.label }}<br>
-            {{ form.name(size=30) }}
-        </p>
-        <p>
-            {{ form.price.label }}<br>
-            {{ form.price(size=5) }}
-        </p>
-        <p>
-            {{ form.isbn.label }}<br>
-            {{ form.isbn(size=10) }}
-        </p>    
-    </form>
+    <a href="/books/edit/{{ book.id }}">Edit</a> | <a href="/books/delete/{{ book.id }}">Delete</a>
+    <p>
+        Id:<br>
+        <b>{{ book.id }}</b>
+    </p>
+    <p>
+        Name:<br>
+        <b>{{ book.name }}</b>
+    </p>
+    <p>
+        Price:<br>
+        <b>{{ book.price }}</b>
+    </p>
+    <p>
+        ISBN:<br>
+        <b>{{ book.isbn }}</b>
+    </p>    
 {% endblock %}
