@@ -57,7 +57,6 @@ def getBookById(id):
 # curl -i http://localhost:5000/api/books -X POST -H "Content-Type: application/json" -d '{"isbn": 5, "name":"Name"}' 
 @app.route('/api/books', methods=['POST'])
 def addBook():
-    # TODO Facilitate minimal data
     if not request.json:
         abort(HTTP_BAD_REQUEST)
     if not 'isbn' in request.json:

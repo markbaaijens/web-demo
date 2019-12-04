@@ -9,7 +9,6 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 # TODO Error when page (or id) not found
-# TODO Show API-url
 
 # Globals
 apiInfo = []
@@ -19,7 +18,6 @@ def getApiInfo():
         # Using eval to convert string to a dictionairy
         apiInfo = eval(requests.get(Config.API_ROOT_URL).content)
         apiInfo.append({"url": Config.API_ROOT_URL})
-        print(apiInfo)
     except:
         apiInfo = []
 
@@ -113,8 +111,6 @@ def addBook():
         'isbn': None
     }  
 
-    print(orgBook)
-
     form = EditBookForm()
     form.id.data = orgBook['id']
     form.name.data = orgBook['name']
@@ -156,16 +152,12 @@ def deleteBook(id):
         # There is one and only one book
         orgBook = {
             'id': book['id'], 
-            'name': book['name'],
-            'price': book['price'],
-            'isbn': book['isbn']
+            'name': book['name']
         }  
 
     form = DeleteBookForm()
     form.id.data = orgBook['id']
     form.name.data = orgBook['name']
-    form.price.data = orgBook['price']
-    form.isbn.data = orgBook['isbn']
 
     if request.method == 'POST':
         requests.delete(Config.API_ROOT_URL + '/books' + '/' + str(id))
@@ -178,7 +170,7 @@ def deleteBook(id):
         flash('Delete requested for book {}, id {}'.format(form.id.data, form.name.data))
         return redirect('/books')   
 
-    return render_template('book.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('book_delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
 if __name__ == '__main__':
     apiInfo = getApiInfo()

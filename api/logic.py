@@ -1,4 +1,3 @@
-# TODO Sepaarate logic form model: remove import of 'books'
 from model import books, saveData, readData
 
 EXCEPTION_FIELD_ISBN_IS_REQUIRED =  'EXCEPTION_FIELD_ISBN_IS_REQUIRED'
