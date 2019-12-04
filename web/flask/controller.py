@@ -8,7 +8,6 @@ app = Flask(__name__)
 
 app.config.from_object(Config)
 
-# TODO (api)/version instead of (api)/
 # TODO Error when page (or id) not found
 # TODO Show API-url
 
@@ -19,6 +18,8 @@ def getApiInfo():
     try:
         # Using eval to convert string to a dictionairy
         apiInfo = eval(requests.get(Config.API_ROOT_URL).content)
+        apiInfo.append({"url": Config.API_ROOT_URL})
+        print(apiInfo)
     except:
         apiInfo = []
 
