@@ -43,7 +43,7 @@ def getBooks():
 
     nrOfBooks = len(bookList)  # Count books client-side
 
-    return render_template('books.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
+    return render_template('books/list.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
         nrOfBooks = nrOfBooks)
 
 # GET/POST /books/<id>
@@ -73,7 +73,7 @@ def getBooksById(id):
     form.price.data = orgBook['price']
     form.isbn.data = orgBook['isbn']    
 
-    return render_template('book.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
 # GET/POST /books/edit/<id>
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST'])
@@ -126,7 +126,7 @@ def editBook(id):
         flash('Save requested for book {}, id {}'.format(form.id.data, form.name.data))
         return redirect('/books/' + str(id))   
 
-    return render_template('book_edit.html', actionTitle = 'Edit book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/edit.html', actionTitle = 'Edit book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
 # GET/POST /books/add
 @app.route('/books/add', methods=['GET', 'POST'])
@@ -162,7 +162,7 @@ def addBook():
         flash('Save requested for book {}, id {}'.format(form.id.data, form.name.data))
         return redirect('/books')
 
-    return render_template('book_edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
 # GET/POST /books/<id>
 @app.route('/books/delete/<int:id>', methods=['GET', 'POST'])
@@ -198,7 +198,7 @@ def deleteBook(id):
         flash('Delete requested for book {}, id {}'.format(form.id.data, form.name.data))
         return redirect('/books')   
 
-    return render_template('book_delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
 if __name__ == '__main__':
     apiInfo = getApiInfo()
