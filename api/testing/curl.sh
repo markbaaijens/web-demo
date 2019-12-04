@@ -9,6 +9,8 @@
 
 # TODO Fill environment (now empty)
 # TODO Test on empty isbn
+# TODO multiple checks per test
+
 
 debug=0  # Set to 1 to show curl-statements
 
