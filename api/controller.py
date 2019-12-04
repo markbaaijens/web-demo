@@ -83,8 +83,7 @@ def editBook(id):
     if not request.json:
         abort(HTTP_BAD_REQUEST)
 
-    # TODO Use getBookByIdLogic
-    book = [book for book in books if book['id'] == id]
+    book = getBookByIdLogic(id)
     if len(book) == 0:
         abort(HTTP_NOT_FOUND)
 
@@ -108,8 +107,7 @@ def editBook(id):
 # curl -i http://localhost:5000/books/3 -X DELETE
 @app.route('/books/<int:id>', methods=['DELETE'])
 def deleteBook(id):
-    # TODO Use getBookByIdLogic
-    book = [book for book in books if book['id'] == id]
+    book = getBookByIdLogic(id)
     if len(book) == 0:
         abort(HTTP_NOT_FOUND)
 
