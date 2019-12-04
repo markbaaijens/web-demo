@@ -47,7 +47,7 @@ def getBooks():
 
     return render_template('books.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
         nrOfBooks = nrOfBooks)
-
+# TODO Separate edit from showing by adding extra screen
 # GET/POST /books/<id>
 @app.route('/books/<int:id>', methods=['GET', 'POST'])
 def getBooksById(id):
