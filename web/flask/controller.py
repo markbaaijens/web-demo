@@ -2,7 +2,7 @@
 from flask import Flask, render_template, jsonify, request, redirect, flash
 import requests
 from config import Config
-from forms import EditBookForm, DeleteBookForm
+from forms import ShowBookForm, EditBookForm, DeleteBookForm
 
 app = Flask(__name__)
 
@@ -45,10 +45,39 @@ def getBooks():
 
     return render_template('books.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
         nrOfBooks = nrOfBooks)
-# TODO Separate edit from showing by adding extra screen
+
 # GET/POST /books/<id>
-@app.route('/books/<int:id>', methods=['GET', 'POST'])
+@app.route('/books/<int:id>', methods=['GET'])
 def getBooksById(id):
+    global apiInfo
+
+    try:
+        # Using eval to convert string to a dictionairy
+        bookList = eval(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
+    except:
+        bookList = []  
+
+    for book in bookList:  
+        # TODO make use of a pre-defined class
+        # There is one and only one book
+        orgBook = {
+            'id': book['id'], 
+            'name': book['name'],
+            'price': book['price'],
+            'isbn': book['isbn']
+        }  
+
+    form = ShowBookForm()
+    form.id.data = orgBook['id']
+    form.name.data = orgBook['name']
+    form.price.data = orgBook['price']
+    form.isbn.data = orgBook['isbn']    
+
+    return render_template('book.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+
+# GET/POST /books/edit/<id>
+@app.route('/books/edit/<int:id>', methods=['GET', 'POST'])
+def editBook(id):
     global apiInfo
 
     try:
@@ -97,9 +126,9 @@ def getBooksById(id):
         flash('Save requested for book {}, id {}'.format(form.id.data, form.name.data))
         return redirect('/books/' + str(id))   
 
-    return render_template('book.html', actionTitle = 'Edit book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('book_edit.html', actionTitle = 'Edit book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
-# GET/POST /books/addbook
+# GET/POST /books/add
 @app.route('/books/add', methods=['GET', 'POST'])
 def addBook():
     global apiInfo
@@ -138,7 +167,6 @@ def addBook():
 # GET/POST /books/<id>
 @app.route('/books/delete/<int:id>', methods=['GET', 'POST'])
 def deleteBook(id):
-    # TODO Minimal form
     global apiInfo
 
     try:

@@ -2,7 +2,6 @@
 
 {% block content %}
     <h2>{{ actionTitle }}</h2>
-    <a href="/books/edit/{{ form.id.data }}">Edit</a> | <a href="/books/delete/{{ form.id.data }}">Delete</a>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -21,5 +20,6 @@
             {{ form.isbn.label }}<br>
             {{ form.isbn(size=10) }}
         </p>    
+        <p>{{ form.submit() }}</p>
     </form>
 {% endblock %}
