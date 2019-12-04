@@ -162,7 +162,7 @@ def addBook():
         flash('Save requested for book {}, id {}'.format(form.id.data, form.name.data))
         return redirect('/books')
 
-    return render_template('book.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('book_edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
 # GET/POST /books/<id>
 @app.route('/books/delete/<int:id>', methods=['GET', 'POST'])
