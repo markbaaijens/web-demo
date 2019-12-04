@@ -23,15 +23,15 @@ def invalidBodyError(error):
 def methodNotAllowedError(error):
     return make_response(jsonify({'message': 'Method ' + request.method + ' is not allowed on ' + request.url}), HTTP_METHOD_NOT_ALLOWED)
 
-# GET /
-# curl -i http://localhost:5000
-@app.route('/', methods=['GET'])
+# GET /api
+# curl -i http://localhost:5000/api
+@app.route('/api', methods=['GET'])
 def root():
     return make_response(jsonify({'app': 'API-demo'}, {'version': '1.0'}), HTTP_OK)
 
-# GET /books
-# curl -i http://localhost:5000/books
-@app.route('/books', methods=['GET'])
+# GET /api/books
+# curl -i http://localhost:5000/api/books
+@app.route('/api/books', methods=['GET'])
 def getBooks():
     try:
         books = getAllBookslogic()
@@ -40,9 +40,9 @@ def getBooks():
 
     return make_response(jsonify(books), HTTP_OK)
 
-# GET /books/<id>
-# curl -i http://localhost:5000/books/1
-@app.route('/books/<int:id>', methods=['GET'])
+# GET /api/books/<id>
+# curl -i http://localhost:5000/api/books/1
+@app.route('/api/books/<int:id>', methods=['GET'])
 def getBookById(id):
     try:
         book = getBookByIdLogic(id)
@@ -53,9 +53,9 @@ def getBookById(id):
         abort(HTTP_NOT_FOUND)
     return make_response(jsonify(book), HTTP_OK)
 
-# POST /books/<id>
-# curl -i http://localhost:5000/books -X POST -H "Content-Type: application/json" -d '{"isbn": 5, "name":"Name"}' 
-@app.route('/books', methods=['POST'])
+# POST /api/books/<id>
+# curl -i http://localhost:5000/api/books -X POST -H "Content-Type: application/json" -d '{"isbn": 5, "name":"Name"}' 
+@app.route('/api/books', methods=['POST'])
 def addBook():
     # TODO Facilitate minimal data
     if not request.json:
@@ -76,9 +76,9 @@ def addBook():
     
     return make_response(jsonify(newBook), HTTP_CREATED)
 
-# PATCH /books/<id>
-# curl -i http://localhost:5000/books/3 -X PATCH -H "Content-Type: application/json" -d '{"isbn": 66, "name":"Name"}'
-@app.route('/books/<int:id>', methods=['PATCH'])
+# PATCH /api/books/<id>
+# curl -i http://localhost:5000/api/books/3 -X PATCH -H "Content-Type: application/json" -d '{"isbn": 66, "name":"Name"}'
+@app.route('/api/books/<int:id>', methods=['PATCH'])
 def editBook(id):
     if not request.json:
         abort(HTTP_BAD_REQUEST)
@@ -103,9 +103,9 @@ def editBook(id):
 
     return make_response(jsonify(updatedBook), HTTP_OK)
 
-# DELETE /books/<id>
-# curl -i http://localhost:5000/books/3 -X DELETE
-@app.route('/books/<int:id>', methods=['DELETE'])
+# DELETE /api/books/<id>
+# curl -i http://localhost:5000/api/books/3 -X DELETE
+@app.route('/api/books/<int:id>', methods=['DELETE'])
 def deleteBook(id):
     book = getBookByIdLogic(id)
     if len(book) == 0:
