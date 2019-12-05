@@ -46,7 +46,7 @@ def listBook():
     return render_template('books/list.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
         nrOfBooks = nrOfBooks)
 
-# GET/POST /books/<id>
+# GET /books/<id>
 @app.route('/books/<int:id>', methods=['GET'])
 def detailsBook(id):
     global apiInfo
