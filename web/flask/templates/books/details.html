@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{{ actionTitle }}</h2>
+    <a href="/books/edit/{{ book.id }}">Edit</a> | <a href="/books/delete/{{ book.id }}">Delete</a>
+    <p>
+        Id:<br>
+        <b>{{ book.id }}</b>
+    </p>
+    <p>
+        Name:<br>
+        <b>{{ book.name }}</b>
+    </p>
+    <p>
+        Price:<br>
+        <b>{{ book.price }}</b>
+    </p>
+    <p>
+        ISBN:<br>
+        <b>{{ book.isbn }}</b>
+    </p>    
+{% endblock %}

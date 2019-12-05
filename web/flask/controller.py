@@ -32,7 +32,7 @@ def index():
 
 # GET /books
 @app.route('/books', methods=['GET'])
-def getBooks():
+def listBook():
     global apiInfo
 
     try:
@@ -43,12 +43,35 @@ def getBooks():
 
     nrOfBooks = len(bookList)  # Count books client-side
 
-    return render_template('books.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
+    return render_template('books/list.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
         nrOfBooks = nrOfBooks)
-# TODO Separate edit from showing by adding extra screen
+
 # GET/POST /books/<id>
-@app.route('/books/<int:id>', methods=['GET', 'POST'])
-def getBooksById(id):
+@app.route('/books/<int:id>', methods=['GET'])
+def detailsBook(id):
+    global apiInfo
+
+    try:
+        # Using eval to convert string to a dictionairy
+        bookList = eval(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
+    except:
+        bookList = []  
+
+    for book in bookList:  
+        # TODO make use of a pre-defined class
+        # There is one and only one book
+        orgBook = {
+            'id': book['id'], 
+            'name': book['name'],
+            'price': book['price'],
+            'isbn': book['isbn']
+        }    
+
+    return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = book)
+
+# GET/POST /books/edit/<id>
+@app.route('/books/edit/<int:id>', methods=['GET', 'POST'])
+def editBook(id):
     global apiInfo
 
     try:
@@ -97,9 +120,9 @@ def getBooksById(id):
         flash('Save requested for book {}, id {}'.format(form.id.data, form.name.data))
         return redirect('/books/' + str(id))   
 
-    return render_template('book.html', actionTitle = 'Edit book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/edit.html', actionTitle = 'Edit book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
-# GET/POST /books/addbook
+# GET/POST /books/add
 @app.route('/books/add', methods=['GET', 'POST'])
 def addBook():
     global apiInfo
@@ -133,12 +156,11 @@ def addBook():
         flash('Save requested for book {}, id {}'.format(form.id.data, form.name.data))
         return redirect('/books')
 
-    return render_template('book.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
 # GET/POST /books/<id>
 @app.route('/books/delete/<int:id>', methods=['GET', 'POST'])
 def deleteBook(id):
-    # TODO Minimal form
     global apiInfo
 
     try:
@@ -156,8 +178,6 @@ def deleteBook(id):
         }  
 
     form = DeleteBookForm()
-    form.id.data = orgBook['id']
-    form.name.data = orgBook['name']
 
     if request.method == 'POST':
         requests.delete(Config.API_ROOT_URL + '/books' + '/' + str(id))
@@ -170,7 +190,7 @@ def deleteBook(id):
         flash('Delete requested for book {}, id {}'.format(form.id.data, form.name.data))
         return redirect('/books')   
 
-    return render_template('book_delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
 if __name__ == '__main__':
     apiInfo = getApiInfo()

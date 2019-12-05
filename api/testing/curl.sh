@@ -75,7 +75,7 @@ test_cmd="curl -i http://localhost:5000/api/books/4"
 test_value="HTTP/1.0 404 NOT FOUND"
 run_test "$title" "$test_cmd" "$test_value"
 
-# POST /api/books # TODO Should be OK but is not
+# POST /api/books # TODO (buG) Should be OK but is not
 title="POST /api/books"
 test_cmd="curl -i http://localhost:5000/api/books -X POST -H "\""Content-Type: application/json"\"" -d '{"\""isbn"\"": 5, "\""name"\"":"\""Name"\""}' "
 test_value="HTTP/1.0 201 CREATED"
@@ -87,7 +87,7 @@ test_cmd="curl -i http://localhost:5000/api/books -X POST -H "\""Content-Type: a
 test_value="HTTP/1.0 400 BAD REQUEST"
 run_test "$title" "$test_cmd" "$test_value"
 
-# PATCH /api/books/3  #TODO Should be OK but is not
+# PATCH /api/books/3  #TODO (bug) Should be OK but is not
 title="PATCH /api/books/3"
 test_cmd="curl -i http://localhost:5000/api/books/3 -X PATCH -H "\""Content-Type: application/json"\"" -d '{"\""name"\"":"\""Name66"\""}' "
 test_value="HTTP/1.0 200 OK"
