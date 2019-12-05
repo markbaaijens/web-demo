@@ -14,6 +14,4 @@ class EditBookForm(FlaskForm):
     submit = SubmitField('Save')
 
 class DeleteBookForm(FlaskForm):
-    id = IntegerField('Id', render_kw={'readonly': True})
-    name = StringField('Name', render_kw={'readonly': True})
     submit = SubmitField('Delete')

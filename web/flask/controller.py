@@ -178,8 +178,6 @@ def deleteBook(id):
         }  
 
     form = DeleteBookForm()
-    form.id.data = orgBook['id']
-    form.name.data = orgBook['name']
 
     if request.method == 'POST':
         requests.delete(Config.API_ROOT_URL + '/books' + '/' + str(id))
