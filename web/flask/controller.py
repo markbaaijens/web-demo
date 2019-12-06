@@ -96,7 +96,7 @@ def editBook(id):
     form.price.data = orgBook['price']
     form.isbn.data = orgBook['isbn']
 
-    if request.method == 'POST':
+    if form.validate_on_submit():
         newName = request.form['name']
         newIsbn = request.form['isbn']
         newPrice = request.form['price']
@@ -114,11 +114,6 @@ def editBook(id):
 
         flash('Saved book {}'.format(updatedBook))
         return redirect('/books/' + str(id))      
-
-    if form.validate_on_submit():
-        # TODO Function validate_on_submit is never reached
-        flash('Save requested for book {}, id {}'.format(form.id.data, form.name.data))
-        return redirect('/books/' + str(id))   
 
     return render_template('books/edit.html', actionTitle = 'Edit book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
@@ -140,7 +135,9 @@ def addBook():
     form.price.data = orgBook['price']
     form.isbn.data = orgBook['isbn']
 
-    if request.method == 'POST':   
+    if form.validate_on_submit():
+        # TODO Test
+        # TODO updatedBook => deltaBpook
         updatedBook = {}
         updatedBook['name'] = request.form['name']
         updatedBook['isbn'] = request.form['isbn']
@@ -150,11 +147,6 @@ def addBook():
 
         flash('Added book {}'.format(updatedBook))
         return redirect('/books')      
-
-    if form.validate_on_submit():
-        # TODO Function validate_on_submit is never reached
-        flash('Save requested for book {}, id {}'.format(form.id.data, form.name.data))
-        return redirect('/books')
 
     return render_template('books/edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 

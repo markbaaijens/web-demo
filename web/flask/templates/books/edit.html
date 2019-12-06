@@ -11,6 +11,7 @@
         <p>
             {{ form.name.label }}<br>
             {{ form.name(size=30) }}
+            <!-- Show in ul; smaller, below -->
             {% for error in form.name.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
