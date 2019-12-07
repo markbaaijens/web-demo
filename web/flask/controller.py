@@ -172,18 +172,13 @@ def deleteBook(id):
             'name': book['name']
         }  
 
-    form = DeleteBookForm()
+    form = DeleteBookForm()     
 
-    if request.method == 'POST':
+    if form.validate_on_submit():
         requests.delete(Config.API_ROOT_URL + '/books' + '/' + str(id))
 
         flash('Deleted book {}'.format(id))
-        return redirect('/books')      
-
-    if form.validate_on_submit():
-        # TODO Function validate_on_submit is never reached
-        flash('Delete requested for book {}, id {}'.format(form.id.data, form.name.data))
-        return redirect('/books')   
+        return redirect('/books')  
 
     return render_template('books/delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 
