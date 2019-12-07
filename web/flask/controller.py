@@ -91,12 +91,14 @@ def editBook(id):
         }  
 
     form = EditBookForm()
-    form.id.data = orgBook['id']
-    form.name.data = orgBook['name']
-    form.price.data = orgBook['price']
-    form.isbn.data = orgBook['isbn']
 
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        form.id.data = orgBook['id']
+        form.name.data = orgBook['name']
+        form.price.data = orgBook['price']
+        form.isbn.data = orgBook['isbn']
+
+    if request.method == 'POST' and form.validate():
         newName = request.form['name']
         newIsbn = request.form['isbn']
         newPrice = request.form['price']
@@ -113,7 +115,7 @@ def editBook(id):
         requests.patch(Config.API_ROOT_URL + '/books' + '/' + str(id), json = updatedBook)
 
         flash('Saved book {}'.format(updatedBook))
-        return redirect('/books/' + str(id))      
+        return redirect('/books/' + str(id))     
 
     return render_template('books/edit.html', actionTitle = 'Edit book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
 

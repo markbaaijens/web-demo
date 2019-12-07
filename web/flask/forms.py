@@ -1,19 +1,29 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, DecimalField
-from wtforms.validators import InputRequired, Length
+from wtforms.validators import Length, InputRequired, NumberRange, Required
 
-# TODO Validate on no characters is numerical fields
 # TODO Use selectorfield, datefield, etc.
-
-# TODO Show custom message for length
-# TODO Show custom message for required (DataRequired?)
+# TODO Move validators to a different file: https://exploreflask.com/en/latest/forms.html
 
 class EditBookForm(FlaskForm):
-    id = IntegerField('Id', validators=[InputRequired()], render_kw={'readonly': True})
-    name = StringField('Name', validators=[InputRequired(message='Name is required'), Length(max=5)])
+    id = IntegerField('Id', render_kw={'readonly': True})
+    name = StringField('Name')
     price = DecimalField('Price', places=2)
-    isbn = IntegerField('ISBN', validators=[InputRequired(message='ISBN is required')])
+    isbn = IntegerField('ISBN')
     submit = SubmitField('Save')
+
+    # Not using standard validators like Required b/c they do not show custom message; this is overruled by HTML5
+    def validate_name(self, field):
+        if field.data == '':  
+            raise ValueError('Field is required')
+        if len(field.data) > 5:
+            raise ValueError('Maximum size is 5 characters')
+        pass
+
+    def validate_isbn(self, field):
+        if field.data < 1 or field.data > 10000 - 1:
+            raise ValueError('Value must be between 1 and 9999')
+        pass
 
 class DeleteBookForm(FlaskForm):
     submit = SubmitField('Delete')
