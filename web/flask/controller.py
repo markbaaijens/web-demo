@@ -3,6 +3,7 @@ from flask import Flask, render_template, jsonify, request, redirect, flash
 import requests
 from config import Config
 from forms import EditBookForm, DeleteBookForm
+import json
 
 app = Flask(__name__)
 
@@ -16,7 +17,7 @@ apiInfo = []
 def getApiInfo():
     try:
         # Using eval to convert string to a dictionairy
-        apiInfo = eval(requests.get(Config.API_ROOT_URL).content)
+        apiInfo = json.loads(requests.get(Config.API_ROOT_URL).content)
         apiInfo.append({"url": Config.API_ROOT_URL})
     except:
         apiInfo = []
@@ -37,8 +38,9 @@ def listBook():
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(Config.API_ROOT_URL + '/books').content)
+        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books').content)
     except:
+        print('E')
         bookList = []
 
     nrOfBooks = len(bookList)  # Count books client-side
@@ -56,7 +58,7 @@ def detailsBook(id):
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
+        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
     except:
         bookList = []  
 
@@ -79,7 +81,7 @@ def editBook(id):
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
+        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
     except:
         bookList = []  
 
@@ -163,7 +165,7 @@ def deleteBook(id):
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
+        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
     except:
         bookList = []  
 
