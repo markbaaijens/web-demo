@@ -43,6 +43,9 @@ def listBook():
 
     nrOfBooks = len(bookList)  # Count books client-side
 
+    for book in bookList:
+        book['price'] = '%.2f' % book['price']  # Some formatting to obtain 2 decimals
+
     return render_template('books/list.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
         nrOfBooks = nrOfBooks)
 
@@ -63,11 +66,11 @@ def detailsBook(id):
         orgBook = {
             'id': book['id'], 
             'name': book['name'],
-            'price': book['price'],
+            'price': '%.2f' % book['price'],  # Two decimals
             'isbn': book['isbn']
         }    
 
-    return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = book)
+    return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook)
 
 # GET/POST /books/edit/<id>
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST'])
@@ -107,14 +110,15 @@ def editBook(id):
 
         if newName.strip() != orgBook['name'].strip():
             updatedBook['name'] = newName
-        if str(newIsbn) != str(orgBook['isbn']):  # Convert numeric to string to have a precise comparison
+        if int(newIsbn) != int(orgBook['isbn']):  # Convert to float to have a precise comparison
             updatedBook['isbn'] = newIsbn
-        if str(newPrice) != str(orgBook['price']):  # Convert numeric to string to have a precise comparison
+        if float(newPrice) != float(orgBook['price']):  # Convert to float to have a precise comparison
             updatedBook['price'] = newPrice
 
-        requests.patch(Config.API_ROOT_URL + '/books' + '/' + str(id), json = updatedBook)
-
-        flash('Saved book {}'.format(updatedBook))
+        if updatedBook <> {}:
+            requests.patch(Config.API_ROOT_URL + '/books' + '/' + str(id), json = updatedBook)
+            flash('Saved book {}'.format(updatedBook))
+            
         return redirect('/books/' + str(id))     
 
     return render_template('books/edit.html', actionTitle = 'Edit book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
