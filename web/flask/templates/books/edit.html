@@ -13,7 +13,7 @@
             {{ form.name(size=30) }}
             <!-- Show in ul; smaller, below -->
             {% for error in form.name.errors %}
-                <p><span style="color: red;" font-size="small">[{{ error }}]</span></p>
+                <br><small><span style="color: red;">[{{ error }}]</span></small>
             {% endfor %}
         </p>
         <p>
@@ -24,7 +24,7 @@
             {{ form.isbn.label }}<br>
             {{ form.isbn(size=10) }}
             {% for error in form.isbn.errors %}
-                <p><span style="color: red;" font-size="small">[{{ error }}]</span></p>
+                <br><small><span style="color: red;">[{{ error }}]</span></small>
             {% endfor %}
         </p>    
         <p>{{ form.submit() }}</p>
