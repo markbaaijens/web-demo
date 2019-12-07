@@ -98,7 +98,7 @@ def editBook(id):
         form.price.data = orgBook['price']
         form.isbn.data = orgBook['isbn']
 
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         newName = request.form['name']
         newIsbn = request.form['isbn']
         newPrice = request.form['price']
@@ -132,13 +132,14 @@ def addBook():
     }  
 
     form = EditBookForm()
-    form.id.data = orgBook['id']
-    form.name.data = orgBook['name']
-    form.price.data = orgBook['price']
-    form.isbn.data = orgBook['isbn']
 
-    if form.validate_on_submit():
-        # TODO Test
+    if request.method == 'GET':
+        form.id.data = orgBook['id']
+        form.name.data = orgBook['name']
+        form.price.data = orgBook['price']
+        form.isbn.data = orgBook['isbn']
+
+    if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         # TODO updatedBook => deltaBpook
         updatedBook = {}
         updatedBook['name'] = request.form['name']

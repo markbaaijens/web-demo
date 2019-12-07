@@ -4,6 +4,7 @@ from wtforms.validators import Length, InputRequired, NumberRange, Required
 
 # TODO Use selectorfield, datefield, etc.
 # TODO Move validators to a different file: https://exploreflask.com/en/latest/forms.html
+# TODO Check for unique name: https://exploreflask.com/en/latest/forms.html
 
 class EditBookForm(FlaskForm):
     id = IntegerField('Id', render_kw={'readonly': True})
