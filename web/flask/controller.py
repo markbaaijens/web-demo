@@ -106,18 +106,18 @@ def editBook(id):
         newIsbn = request.form['isbn']
         newPrice = request.form['price']
    
-        updatedBook = {}
+        deltaBook = {}
 
         if newName.strip() != orgBook['name'].strip():
-            updatedBook['name'] = newName
+            deltaBook['name'] = newName
         if int(newIsbn) != int(orgBook['isbn']):  # Convert to float to have a precise comparison
-            updatedBook['isbn'] = newIsbn
+            deltaBook['isbn'] = newIsbn
         if float(newPrice) != float(orgBook['price']):  # Convert to float to have a precise comparison
-            updatedBook['price'] = newPrice
+            deltaBook['price'] = newPrice
 
-        if updatedBook <> {}:
-            requests.patch(Config.API_ROOT_URL + '/books' + '/' + str(id), json = updatedBook)
-            flash('Saved book {}'.format(updatedBook))
+        if deltaBook <> {}:
+            requests.patch(Config.API_ROOT_URL + '/books' + '/' + str(id), json = deltaBook)
+            flash('Saved book {}'.format(deltaBook))
             
         return redirect('/books/' + str(id))     
 
@@ -144,15 +144,14 @@ def addBook():
         form.isbn.data = orgBook['isbn']
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
-        # TODO updatedBook => deltaBpook
-        updatedBook = {}
-        updatedBook['name'] = request.form['name']
-        updatedBook['isbn'] = request.form['isbn']
-        updatedBook['price'] = request.form['price']
+        deltaBook = {}
+        deltaBook['name'] = request.form['name']
+        deltaBook['isbn'] = request.form['isbn']
+        deltaBook['price'] = request.form['price']
 
-        requests.post(Config.API_ROOT_URL + '/books', json = updatedBook)
+        requests.post(Config.API_ROOT_URL + '/books', json = deltaBook)
 
-        flash('Added book {}'.format(updatedBook))
+        flash('Added book {}'.format(deltaBook))
         return redirect('/books')      
 
     return render_template('books/edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)

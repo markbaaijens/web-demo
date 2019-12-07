@@ -5,7 +5,6 @@
     <a href="books/add">Add</a>
     <p></p>
     {% for book in books %}
-    <!--  TODO Show correct formatting of price  -->
     <div><b>
         {{ book.name }}</b> ({{ book.id }}) - <a href="/books/{{ book.id }}">Details</a> |
                                               <a href="/books/edit/{{ book.id }}">Edit</a> |  
