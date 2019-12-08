@@ -12,14 +12,14 @@ def ConvertToTwoDecimals(decimalValue):
 
 def ConvertEnumBookTypeToDescription(bookType):
     if bookType == BookType.Unknown:
-        bookTypeDescription = 'Unknown'
+        description = 'Unknown'
     else:
         if bookType == BookType.Fiction:
-            bookTypeDescription = 'Fiction'
+            description = 'Fiction'
         else:
             if bookType == BookType.NonFiction:
-                bookTypeDescription = 'Non-fiction'
+                description = 'Non-fiction'
             else:
                 if bookType == BookType.Educational:
-                    bookTypeDescription = 'Educational'
-    return bookTypeDescription + ' (' + str(bookType) + ')'
+                    description = 'Educational'
+    return description + ' (' + str(bookType) + ')'
