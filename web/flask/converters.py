@@ -1,3 +1,5 @@
+from enums import BookType
+
 def ConvertBooleanToText(booleanValue):
     if booleanValue: 
         return 'Yes'
@@ -9,14 +11,15 @@ def ConvertToTwoDecimals(decimalValue):
     return '%.2f' % decimalValue
 
 def ConvertEnumBookTypeToDescription(bookType):
-    if bookType == 0:
-        bookTypeDescription = 'Fiction'
+    if bookType == BookType.Unknown:
+        bookTypeDescription = 'Unknown'
     else:
-        if bookType == 1:
-            bookTypeDescription = 'Non-fiction'
+        if bookType == BookType.Fiction:
+            bookTypeDescription = 'Fiction'
         else:
-            if bookType == 2:
-                bookTypeDescription = 'Eductional'
+            if bookType == BookType.NonFiction:
+                bookTypeDescription = 'Non-fiction'
             else:
-                bookTypeDescription = 'Unknown'
+                if bookType == BookType.Educational:
+                    bookTypeDescription = 'Educational'
     return bookTypeDescription + ' (' + str(bookType) + ')'
