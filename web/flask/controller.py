@@ -1,8 +1,11 @@
 # TODO Exception handling API-calls (based on return codes op calls) 
 from flask import Flask, render_template, jsonify, request, redirect, flash
 import requests
+import json
+
 from config import Config
 from forms import EditBookForm, DeleteBookForm
+from converters import ConvertToTwoDecimals, ConvertBooleanToText
 
 app = Flask(__name__)
 
@@ -16,7 +19,7 @@ apiInfo = []
 def getApiInfo():
     try:
         # Using eval to convert string to a dictionairy
-        apiInfo = eval(requests.get(Config.API_ROOT_URL).content)
+        apiInfo = json.loads(requests.get(Config.API_ROOT_URL).content)
         apiInfo.append({"url": Config.API_ROOT_URL})
     except:
         apiInfo = []
@@ -37,14 +40,16 @@ def listBook():
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(Config.API_ROOT_URL + '/books').content)
+        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books').content)
     except:
         bookList = []
 
     nrOfBooks = len(bookList)  # Count books client-side
 
+    # Some formatting 
     for book in bookList:
-        book['price'] = '%.2f' % book['price']  # Some formatting to obtain 2 decimals
+        book['price'] = ConvertToTwoDecimals(book['price'])
+        book['obsolete'] = ConvertBooleanToText(book['obsolete'])
 
     return render_template('books/list.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
         nrOfBooks = nrOfBooks)
@@ -56,7 +61,7 @@ def detailsBook(id):
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
+        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
     except:
         bookList = []  
 
@@ -66,9 +71,13 @@ def detailsBook(id):
         orgBook = {
             'id': book['id'], 
             'name': book['name'],
-            'price': '%.2f' % book['price'],  # Two decimals
-            'isbn': book['isbn']
+            'price': book['price'],  # Two decimals
+            'isbn': book['isbn'],
+            'obsolete': book['obsolete']
         }    
+
+    orgBook['price'] = ConvertToTwoDecimals(orgBook['price'])
+    orgBook['obsolete'] = ConvertBooleanToText(orgBook['obsolete'])
 
     return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook)
 
@@ -79,7 +88,7 @@ def editBook(id):
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
+        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
     except:
         bookList = []  
 
@@ -90,7 +99,8 @@ def editBook(id):
             'id': book['id'], 
             'name': book['name'],
             'price': book['price'],
-            'isbn': book['isbn']
+            'isbn': book['isbn'],
+            'obsolete': book['obsolete']
         }  
 
     form = EditBookForm()
@@ -100,11 +110,13 @@ def editBook(id):
         form.name.data = orgBook['name']
         form.price.data = orgBook['price']
         form.isbn.data = orgBook['isbn']
+        form.obsolete.data = orgBook['obsolete']
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         newName = request.form['name']
         newIsbn = request.form['isbn']
         newPrice = request.form['price']
+        newObsolete = form.obsolete.data  # TODO (bug) request.form['<booelan>'] does not return
    
         deltaBook = {}
 
@@ -114,8 +126,11 @@ def editBook(id):
             deltaBook['isbn'] = newIsbn
         if float(newPrice) != float(orgBook['price']):  # Convert to float to have a precise comparison
             deltaBook['price'] = newPrice
+        if newObsolete != orgBook['obsolete']: 
+            deltaBook['obsolete'] = newObsolete
 
         if deltaBook <> {}:
+            # TODO (bug) Error when doing the api-call
             requests.patch(Config.API_ROOT_URL + '/books' + '/' + str(id), json = deltaBook)
             flash('Saved book {}'.format(deltaBook))
             
@@ -132,7 +147,8 @@ def addBook():
         'id': 0, 
         'name': "",
         'price': 0,
-        'isbn': None
+        'isbn': None,
+        'obsolete': False
     }  
 
     form = EditBookForm()
@@ -142,13 +158,16 @@ def addBook():
         form.name.data = orgBook['name']
         form.price.data = orgBook['price']
         form.isbn.data = orgBook['isbn']
+        form.obsolete.data = orgBook['obsolete']
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         deltaBook = {}
         deltaBook['name'] = request.form['name']
         deltaBook['isbn'] = request.form['isbn']
         deltaBook['price'] = request.form['price']
+        deltaBook['obsolete'] = form.obsolete.data # TODO (bug) request.form['<booelan>'] does not return
 
+        # TODO (bug) Error when doing the api-call
         requests.post(Config.API_ROOT_URL + '/books', json = deltaBook)
 
         flash('Added book {}'.format(deltaBook))
@@ -163,7 +182,7 @@ def deleteBook(id):
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = eval(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
+        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
     except:
         bookList = []  
 

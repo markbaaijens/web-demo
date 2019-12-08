@@ -27,6 +27,10 @@
                 <br><small><span style="color: red;">[{{ error }}]</span></small>
             {% endfor %}
         </p>    
+        <p>
+            {{ form.obsolete.label }}<br>
+            {{ form.obsolete  }}
+        </p>
         <p>{{ form.submit() }}</p>
     </form>
 {% endblock %}

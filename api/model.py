@@ -7,11 +7,12 @@ books = []
 
 # TODO Strong typed class
 class Book():
-    def __init__(self, id, name, price, isbn):
-        self.id = id
-        self.name = name
-        self.price = price
-        self.isbn = isbn
+    def __init__(self, id, name, price, isbn, obsolete):
+        self.id = id              # Integer
+        self.name = name          # String(30)
+        self.price = price        # Float
+        self.isbn = isbn          # Integer
+        self.obsolote = obsolete  # Boolean
 
 def saveData():
     datasAsJson = json.dumps(books)
@@ -24,14 +25,15 @@ def readData():
     if not path.exists(DATA_FILE_NAME):
         return
 
-    booksFromFile = eval(open(DATA_FILE_NAME).read())
+    booksFromFile = json.loads(open(DATA_FILE_NAME).read())
 
     for book in booksFromFile:
         newBook = {
             'id': book['id'], 
             'name': book['name'],
             'price': book['price'],
-            'isbn': book['isbn']
+            'isbn': book['isbn'],
+            'obsolete': book['obsolete']
         }       
         books.append(newBook)
 
