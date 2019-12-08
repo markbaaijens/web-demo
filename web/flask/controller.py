@@ -109,7 +109,7 @@ def editBook(id):
         newName = request.form['name']
         newIsbn = request.form['isbn']
         newPrice = request.form['price']
-        newObsolete = request.form['obsolete']
+        newObsolete = form.obsolete.data  # TODO (bug) request.form['<booelan>'] does not return
    
         deltaBook = {}
 
@@ -158,7 +158,7 @@ def addBook():
         deltaBook['name'] = request.form['name']
         deltaBook['isbn'] = request.form['isbn']
         deltaBook['price'] = request.form['price']
-        deltaBook['obsolete'] = request.form['obsolete']
+        deltaBook['obsolete'] = form.obsolete.data # TODO (bug) request.form['<booelan>'] does not return
 
         # TODO (bug) Error when doing the api-call
         requests.post(Config.API_ROOT_URL + '/books', json = deltaBook)
