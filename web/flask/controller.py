@@ -5,7 +5,7 @@ import json
 
 from config import Config
 from forms import EditBookForm, DeleteBookForm
-from converters import ConvertToTwoDecimals, ConvertBooleanToText
+from converters import ConvertToTwoDecimals, ConvertBooleanToText, ConvertEnumBookTypeToDescription
 
 app = Flask(__name__)
 
@@ -50,6 +50,7 @@ def listBook():
     for book in bookList:
         book['price'] = ConvertToTwoDecimals(book['price'])
         book['obsolete'] = ConvertBooleanToText(book['obsolete'])
+        book['bookType'] = ConvertEnumBookTypeToDescription(book['bookType'])
 
     return render_template('books/list.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
         nrOfBooks = nrOfBooks)
@@ -73,11 +74,13 @@ def detailsBook(id):
             'name': book['name'],
             'price': book['price'],  # Two decimals
             'isbn': book['isbn'],
-            'obsolete': book['obsolete']
+            'obsolete': book['obsolete'],
+            'bookType': book['bookType']
         }    
 
     orgBook['price'] = ConvertToTwoDecimals(orgBook['price'])
     orgBook['obsolete'] = ConvertBooleanToText(orgBook['obsolete'])
+    orgBook['bookType'] = ConvertEnumBookTypeToDescription(orgBook['bookType'])
 
     return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook)
 
