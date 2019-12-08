@@ -37,8 +37,6 @@ def readData():
         }       
         books.append(newBook)
 
-    print(books)
-
     return
 
 '''

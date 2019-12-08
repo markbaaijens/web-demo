@@ -40,7 +40,6 @@ def listBook():
         # Using eval to convert string to a dictionairy
         bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books').content)
     except:
-        print('E')
         bookList = []
 
     nrOfBooks = len(bookList)  # Count books client-side
@@ -69,7 +68,8 @@ def detailsBook(id):
             'id': book['id'], 
             'name': book['name'],
             'price': '%.2f' % book['price'],  # Two decimals
-            'isbn': book['isbn']
+            'isbn': book['isbn'],
+            'obsolete': book['obsolete']
         }    
 
     return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook)
@@ -92,7 +92,8 @@ def editBook(id):
             'id': book['id'], 
             'name': book['name'],
             'price': book['price'],
-            'isbn': book['isbn']
+            'isbn': book['isbn'],
+            'obsolete': book['obsolete']
         }  
 
     form = EditBookForm()
@@ -102,11 +103,13 @@ def editBook(id):
         form.name.data = orgBook['name']
         form.price.data = orgBook['price']
         form.isbn.data = orgBook['isbn']
+        form.obsolete.data = orgBook['obsolete']
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         newName = request.form['name']
         newIsbn = request.form['isbn']
         newPrice = request.form['price']
+        newObsolete = request.form['obsolete']
    
         deltaBook = {}
 
@@ -116,8 +119,11 @@ def editBook(id):
             deltaBook['isbn'] = newIsbn
         if float(newPrice) != float(orgBook['price']):  # Convert to float to have a precise comparison
             deltaBook['price'] = newPrice
+        if newObsolete != orgBook['obsolete']: 
+            deltaBook['obsolete'] = newObsolete
 
         if deltaBook <> {}:
+            # TODO (bug) Error when doing the api-call
             requests.patch(Config.API_ROOT_URL + '/books' + '/' + str(id), json = deltaBook)
             flash('Saved book {}'.format(deltaBook))
             
@@ -134,7 +140,8 @@ def addBook():
         'id': 0, 
         'name': "",
         'price': 0,
-        'isbn': None
+        'isbn': None,
+        'obsolete': False
     }  
 
     form = EditBookForm()
@@ -144,13 +151,16 @@ def addBook():
         form.name.data = orgBook['name']
         form.price.data = orgBook['price']
         form.isbn.data = orgBook['isbn']
+        form.obsolete.data = orgBook['obsolete']
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         deltaBook = {}
         deltaBook['name'] = request.form['name']
         deltaBook['isbn'] = request.form['isbn']
         deltaBook['price'] = request.form['price']
+        deltaBook['obsolete'] = request.form['obsolete']
 
+        # TODO (bug) Error when doing the api-call
         requests.post(Config.API_ROOT_URL + '/books', json = deltaBook)
 
         flash('Added book {}'.format(deltaBook))

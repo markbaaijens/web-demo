@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, DecimalField
+from wtforms import StringField, SubmitField, IntegerField, DecimalField, BooleanField
 from wtforms.validators import Length, InputRequired, NumberRange, Required
 
 # TODO Use selectorfield, datefield, etc.
@@ -11,6 +11,7 @@ class EditBookForm(FlaskForm):
     name = StringField('Name')
     price = DecimalField('Price', places=2)
     isbn = IntegerField('ISBN')
+    obsolete = BooleanField('Obsolete')
     submit = SubmitField('Save')
 
     # Not using standard validators like Required b/c they do not show custom message; this is overruled by HTML5

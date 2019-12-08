@@ -53,7 +53,7 @@ def getBookById(id):
         abort(HTTP_NOT_FOUND)
     return make_response(jsonify(book), HTTP_OK)
 
-# POST /api/books/<id>
+# POST /api/books
 # curl -i http://localhost:5000/api/books -X POST -H "Content-Type: application/json" -d '{"isbn": 5, "name":"Name"}' 
 @app.route('/api/books', methods=['POST'])
 def addBook():
@@ -66,6 +66,7 @@ def addBook():
         'name': request.json['name'],
         'price': float(request.json.get('price', 0)),
         'isbn': int(request.json.get('isbn', 0)),
+        'obsolete': request.json.get('obsolete', False)
     }
 
     try:
@@ -95,6 +96,9 @@ def editBook(id):
         updatedBook['isbn'] = int(requestData['isbn'])
     if 'price' in requestData:
         updatedBook['price'] = float(requestData['price'])
+    if 'obsolete' in requestData:
+        updatedBook['obsolete'] = requestData['obsolete']
+
     try:
         editBookLogic(id, updatedBook) 
     except Exception as e:
