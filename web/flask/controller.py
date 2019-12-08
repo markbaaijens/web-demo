@@ -1,9 +1,11 @@
 # TODO Exception handling API-calls (based on return codes op calls) 
 from flask import Flask, render_template, jsonify, request, redirect, flash
 import requests
+import json
+
 from config import Config
 from forms import EditBookForm, DeleteBookForm
-import json
+from converters import ConvertToTwoDecimals, ConvertBooleanToText
 
 app = Flask(__name__)
 
@@ -44,8 +46,10 @@ def listBook():
 
     nrOfBooks = len(bookList)  # Count books client-side
 
+    # Some formatting 
     for book in bookList:
-        book['price'] = '%.2f' % book['price']  # Some formatting to obtain 2 decimals
+        book['price'] = ConvertToTwoDecimals(book['price'])
+        book['obsolete'] = ConvertBooleanToText(book['obsolete'])
 
     return render_template('books/list.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
         nrOfBooks = nrOfBooks)
@@ -67,10 +71,13 @@ def detailsBook(id):
         orgBook = {
             'id': book['id'], 
             'name': book['name'],
-            'price': '%.2f' % book['price'],  # Two decimals
+            'price': book['price'],  # Two decimals
             'isbn': book['isbn'],
             'obsolete': book['obsolete']
         }    
+
+    orgBook['price'] = ConvertToTwoDecimals(orgBook['price'])
+    orgBook['obsolete'] = ConvertBooleanToText(orgBook['obsolete'])
 
     return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook)
 
