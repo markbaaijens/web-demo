@@ -66,7 +66,8 @@ def addBook():
         'name': request.json['name'],
         'price': float(request.json.get('price', 0)),
         'isbn': int(request.json.get('isbn', 0)),
-        'obsolete': request.json.get('obsolete', False)
+        'obsolete': request.json.get('obsolete', False),
+        'bookType': int(request.json.get('bookType', 0))
     }
 
     try:
@@ -98,6 +99,8 @@ def editBook(id):
         updatedBook['price'] = float(requestData['price'])
     if 'obsolete' in requestData:
         updatedBook['obsolete'] = requestData['obsolete']
+    if 'bookType' in requestData:
+        updatedBook['bookType'] = int(requestData['bookType'])
 
     try:
         editBookLogic(id, updatedBook) 

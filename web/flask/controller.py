@@ -103,7 +103,8 @@ def editBook(id):
             'name': book['name'],
             'price': book['price'],
             'isbn': book['isbn'],
-            'obsolete': book['obsolete']
+            'obsolete': book['obsolete'],
+            'bookType': book['bookType']
         }  
 
     form = EditBookForm()
@@ -114,23 +115,26 @@ def editBook(id):
         form.price.data = orgBook['price']
         form.isbn.data = orgBook['isbn']
         form.obsolete.data = orgBook['obsolete']
+        form.bookType.data = orgBook['bookType']
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         newName = request.form['name']
         newIsbn = request.form['isbn']
         newPrice = request.form['price']
         newObsolete = form.obsolete.data  # TODO (bug) request.form['<booelan>'] does not return
-   
+        newBookType = request.form['bookType']
         deltaBook = {}
 
         if newName.strip() != orgBook['name'].strip():
             deltaBook['name'] = newName
-        if int(newIsbn) != int(orgBook['isbn']):  # Convert to float to have a precise comparison
+        if int(newIsbn) != int(orgBook['isbn']):  # Convert to int to have a precise comparison
             deltaBook['isbn'] = newIsbn
         if float(newPrice) != float(orgBook['price']):  # Convert to float to have a precise comparison
             deltaBook['price'] = newPrice
         if newObsolete != orgBook['obsolete']: 
             deltaBook['obsolete'] = newObsolete
+        if int(newBookType) != int(orgBook['bookType']):  # Convert to int to have a precise comparison
+            deltaBook['bookType'] = newBookType
 
         if deltaBook <> {}:
             # TODO (bug) Error when doing the api-call
@@ -151,7 +155,8 @@ def addBook():
         'name': "",
         'price': 0,
         'isbn': None,
-        'obsolete': False
+        'obsolete': False,
+        'bookType': 0
     }  
 
     form = EditBookForm()
@@ -162,6 +167,7 @@ def addBook():
         form.price.data = orgBook['price']
         form.isbn.data = orgBook['isbn']
         form.obsolete.data = orgBook['obsolete']
+        form.bookType.data = orgBook['bookType']
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         deltaBook = {}
@@ -169,6 +175,7 @@ def addBook():
         deltaBook['isbn'] = request.form['isbn']
         deltaBook['price'] = request.form['price']
         deltaBook['obsolete'] = form.obsolete.data # TODO (bug) request.form['<booelan>'] does not return
+        deltaBook['bookType'] = request.form['bookType']
 
         # TODO (bug) Error when doing the api-call
         requests.post(Config.API_ROOT_URL + '/books', json = deltaBook)

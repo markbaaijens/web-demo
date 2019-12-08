@@ -13,7 +13,7 @@ class Book():
         self.price = price        # Float
         self.isbn = isbn          # Integer
         self.obsolote = obsolete  # Boolean
-        self.type = bookType      # Enum: 0 = Unknown, 1 = fiction, 2 = non-fiction, 3 = educational       
+        self.bookType = bookType  # Enum: 0 = Unknown, 1 = fiction, 2 = non-fiction, 3 = educational       
 
 def saveData():
     datasAsJson = json.dumps(books)

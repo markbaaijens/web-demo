@@ -11,6 +11,7 @@ def ConvertToTwoDecimals(decimalValue):
     return '%.2f' % decimalValue
 
 def ConvertEnumBookTypeToDescription(bookType):
+    description = 'Unknown'
     if bookType == BookType.Unknown:
         description = 'Unknown'
     else:
