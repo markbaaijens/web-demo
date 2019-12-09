@@ -209,7 +209,7 @@ def deleteBook(id):
     if form.validate_on_submit():
         requests.delete(Config.API_ROOT_URL + '/books' + '/' + str(id))
 
-        flash('Deleted book {}'.format(id))
+        flash('Deleted book id = {}'.format(id))
         return redirect('/books')  
 
     return render_template('books/delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)

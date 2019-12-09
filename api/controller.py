@@ -71,6 +71,7 @@ def addBook():
     }
 
     try:
+        # TODO Refactor controller/logic to prevent double coding (defaults, etc.)
         newBook = addBookLogic(newBookData)
     except Exception as e:
         return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
@@ -103,6 +104,7 @@ def editBook(id):
         updatedBook['bookType'] = int(requestData['bookType'])
 
     try:
+        # TODO Refactor controller/logic to prevent double coding (defaults, etc.)
         editBookLogic(id, updatedBook) 
     except Exception as e:
         return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
