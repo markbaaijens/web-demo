@@ -1,4 +1,4 @@
-from model import books, saveData, readData
+from model import books, saveData, readData, Book
 
 EXCEPTION_FIELD_ISBN_IS_REQUIRED =  'EXCEPTION_FIELD_ISBN_IS_REQUIRED'
 
@@ -19,19 +19,18 @@ def addBookLogic(newBookData):
     except:
         id = 0
     
-    # TODO Use class Book from model
-    newBook = {
-        'id': id, 
-        'name': newBookData.get('name', ''),
-        'price': newBookData.get('price', 0),
-        'isbn': newBookData.get('isbn', 0),
-        'obsolete': newBookData.get('obsolete', False),
-        'bookType': newBookData.get('bookType', 0)
-    }
+    newBook = Book (
+        id, 
+        newBookData.get('name', ''),
+        newBookData.get('price', 0),
+        newBookData.get('isbn', 0),
+        newBookData.get('obsolete', False),
+        newBookData.get('bookType', 0)
+    )
 
-    books.append(newBook)
+    books.append(vars(newBook))
     saveData()
-    return newBook
+    return vars(newBook)
 
 def editBookLogic(id, updatedBook):
     index = 0
