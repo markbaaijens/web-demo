@@ -24,7 +24,8 @@ def addBookLogic(newBookData):
         'name': newBookData.get('name', ''),
         'price': newBookData.get('price', 0),
         'isbn': newBookData.get('isbn', 0),
-        'obsolete': newBookData.get('obsolete', False)
+        'obsolete': newBookData.get('obsolete', False),
+        'bookType': newBookData.get('bookType', 0)
     }
 
     books.append(newBook)
@@ -48,6 +49,8 @@ def editBookLogic(id, updatedBook):
         books[index]['price'] = updatedBook['price']
     if 'obsolete' in updatedBook:
         books[index]['obsolete'] = updatedBook['obsolete']
+    if 'bookType' in updatedBook:
+        books[index]['bookType'] = updatedBook['bookType']
 
     saveData()
     return True    

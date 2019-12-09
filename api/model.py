@@ -7,12 +7,13 @@ books = []
 
 # TODO Strong typed class
 class Book():
-    def __init__(self, id, name, price, isbn, obsolete):
+    def __init__(self, id, name, price, isbn, obsolete, bookType):
         self.id = id              # Integer
         self.name = name          # String(30)
         self.price = price        # Float
         self.isbn = isbn          # Integer
         self.obsolote = obsolete  # Boolean
+        self.bookType = bookType  # Enum: 0 = Unknown, 1 = fiction, 2 = non-fiction, 3 = educational       
 
 def saveData():
     datasAsJson = json.dumps(books)
@@ -33,7 +34,8 @@ def readData():
             'name': book['name'],
             'price': book['price'],
             'isbn': book['isbn'],
-            'obsolete': book['obsolete']
+            'obsolete': book['obsolete'],
+            'bookType': book['bookType']
         }       
         books.append(newBook)
 
