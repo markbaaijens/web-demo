@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, DecimalField, BooleanField, RadioField
+from wtforms import StringField, SubmitField, IntegerField, DecimalField, BooleanField, SelectField, RadioField
 from wtforms.validators import Length, InputRequired, NumberRange, Required
 
 from enums import BookType
@@ -14,10 +14,15 @@ class EditBookForm(FlaskForm):
     price = DecimalField('Price', places=2)
     isbn = IntegerField('ISBN')
     obsolete = BooleanField('Obsolete')
+
+    # TODO Use RadioField or SelectField; fill with BookType-enum
+    #      bookType = RadioField('Type', choices=[(0, 'Unknown'), (1, 'Fiction'), (2, 'Non-fiction'), (3, 'Educational')])
+    #      - set default and read return-value 
+    #      - request.json does not return anything in controller!
     bookType = IntegerField('Type')
     submit = SubmitField('Save')
 
-    # Not using standard validators like Required b/c they do not show custom message; this is overruled by HTML5
+    # Not using standard wtf-validators like Required b/c they do not show custom message; this is overruled by HTML5
     def validate_name(self, field):
         if field.data == '':  
             raise ValueError('Field is required')
