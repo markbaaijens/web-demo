@@ -96,7 +96,6 @@ def editBook(id):
         bookList = []  
 
     for book in bookList:  
-        # TODO make use of a pre-defined class
         # There is one and only one book
         orgBook = {
             'id': book['id'], 
