@@ -29,6 +29,7 @@ def readData():
     booksFromFile = json.loads(open(DATA_FILE_NAME).read())
 
     for book in booksFromFile:
+        # TODO Use class Book
         newBook = {
             'id': book['id'], 
             'name': book['name'],

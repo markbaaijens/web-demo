@@ -18,7 +18,8 @@ def addBookLogic(newBookData):
         id = books[-1]['id'] + 1
     except:
         id = 0
-
+    
+    # TODO Use class Book from model
     newBook = {
         'id': id, 
         'name': newBookData.get('name', ''),
