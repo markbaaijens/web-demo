@@ -6,6 +6,7 @@ import json
 from config import Config
 from forms import EditBookForm, DeleteBookForm
 from converters import ConvertToTwoDecimals, ConvertBooleanToText, ConvertEnumBookTypeToDescription
+from model import Book
 
 app = Flask(__name__)
 
@@ -67,22 +68,21 @@ def detailsBook(id):
         bookList = []  
 
     for book in bookList:  
-        # TODO make use of a pre-defined class
         # There is one and only one book
-        orgBook = {
-            'id': book['id'], 
-            'name': book['name'],
-            'price': book['price'],  # Two decimals
-            'isbn': book['isbn'],
-            'obsolete': book['obsolete'],
-            'bookType': book['bookType']
-        }    
+        orgBook = Book (
+            book['id'], 
+            book['name'],
+            book['price'],  # Two decimals
+            book['isbn'],
+            book['obsolete'],
+            book['bookType']
+        )    
 
-    orgBook['price'] = ConvertToTwoDecimals(orgBook['price'])
-    orgBook['obsolete'] = ConvertBooleanToText(orgBook['obsolete'])
-    orgBook['bookType'] = ConvertEnumBookTypeToDescription(orgBook['bookType'])
+    orgBook.price = ConvertToTwoDecimals(orgBook['price'])
+    orgBook.obsolete = ConvertBooleanToText(orgBook['obsolete'])
+    orgBook.bookType = ConvertEnumBookTypeToDescription(orgBook['bookType'])
 
-    return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook)
+    return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = vars(orgBook))
 
 # GET/POST /books/edit/<id>
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST'])
@@ -150,24 +150,24 @@ def editBook(id):
 def addBook():
     global apiInfo
 
-    orgBook = {
-        'id': 0, 
-        'name': "",
-        'price': 0,
-        'isbn': None,
-        'obsolete': False,
-        'bookType': 0
-    }  
+    orgBook = Book(
+        0, 
+        "",
+        0,
+        None,
+        False,
+        0
+    )  
 
     form = EditBookForm()
 
     if request.method == 'GET':
-        form.id.data = orgBook['id']
-        form.name.data = orgBook['name']
-        form.price.data = orgBook['price']
-        form.isbn.data = orgBook['isbn']
-        form.obsolete.data = orgBook['obsolete']
-        form.bookType.data = orgBook['bookType']
+        form.id.data = orgBook.id
+        form.name.data = orgBook.name
+        form.price.data = orgBook.price
+        form.isbn.data = orgBook.isbn
+        form.obsolete.data = orgBook.obsolete
+        form.bookType.data = orgBook.bookType
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         deltaBook = {}
@@ -183,9 +183,9 @@ def addBook():
         flash('Added book {}'.format(deltaBook))
         return redirect('/books')      
 
-    return render_template('books/edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = vars(orgBook), form = form)
 
-# GET/POST /books/<id>
+# DELETE /books/<id>
 @app.route('/books/delete/<int:id>', methods=['GET', 'POST'])
 def deleteBook(id):
     global apiInfo
@@ -199,10 +199,14 @@ def deleteBook(id):
     for book in bookList:  
         # TODO make use of a pre-defined class
         # There is one and only one book
-        orgBook = {
-            'id': book['id'], 
-            'name': book['name']
-        }  
+        orgBook = Book(
+            book['id'], 
+            book['name'],
+            0,
+            None,
+            False,
+            0            
+        )  
 
     form = DeleteBookForm()     
 
@@ -212,7 +216,7 @@ def deleteBook(id):
         flash('Deleted book id = {}'.format(id))
         return redirect('/books')  
 
-    return render_template('books/delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = vars(orgBook), form = form)
 
 if __name__ == '__main__':
     apiInfo = getApiInfo()
