@@ -61,18 +61,9 @@ def addBook():
         abort(HTTP_BAD_REQUEST)
     if not 'isbn' in request.json:
         abort(HTTP_BAD_REQUEST)
-
-    newBookData = {
-        'name': request.json['name'],
-        'price': float(request.json.get('price', 0)),
-        'isbn': int(request.json.get('isbn', 0)),
-        'obsolete': request.json.get('obsolete', False),
-        'bookType': int(request.json.get('bookType', 0))
-    }
-
+        
     try:
-        # TODO Refactor controller/logic to prevent double coding (defaults, etc.)
-        newBook = addBookLogic(newBookData)
+        newBook = addBookLogic(request.json)
     except Exception as e:
         return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
     
@@ -91,25 +82,12 @@ def editBook(id):
 
     requestData = request.get_json()
 
-    updatedBook = {}
-    if 'name' in requestData:
-        updatedBook['name'] = requestData['name']
-    if 'isbn' in requestData:
-        updatedBook['isbn'] = int(requestData['isbn'])
-    if 'price' in requestData:
-        updatedBook['price'] = float(requestData['price'])
-    if 'obsolete' in requestData:
-        updatedBook['obsolete'] = requestData['obsolete']
-    if 'bookType' in requestData:
-        updatedBook['bookType'] = int(requestData['bookType'])
-
     try:
-        # TODO Refactor controller/logic to prevent double coding (defaults, etc.)
-        editBookLogic(id, updatedBook) 
+        editBookLogic(id, requestData) 
     except Exception as e:
         return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
 
-    return make_response(jsonify(updatedBook), HTTP_OK)
+    return make_response(jsonify(requestData), HTTP_OK)
 
 # DELETE /api/books/<id>
 # curl -i http://localhost:5000/api/books/3 -X DELETE

@@ -19,14 +19,13 @@ def addBookLogic(newBookData):
     except:
         id = 0
     
-    newBook = Book (
-        id, 
-        newBookData.get('name', ''),
-        newBookData.get('price', 0),
-        newBookData.get('isbn', 0),
-        newBookData.get('obsolete', False),
-        newBookData.get('bookType', 0)
-    )
+    newBook = Book()
+    newBook.id = id 
+    newBook.name = newBookData.get('name', '')
+    newBook.price = float(newBookData.get('price', 0))
+    newBook.isbn =  int(newBookData.get('isbn', 0))
+    newBook.obsolete = newBookData.get('obsolete', False)
+    newBook.bookType = int(newBookData.get('bookType', 0))
 
     books.append(vars(newBook))
     saveData()
@@ -44,13 +43,13 @@ def editBookLogic(id, updatedBook):
     if 'isbn' in updatedBook:
         if updatedBook['isbn'] == 0:
             raise Exception(EXCEPTION_FIELD_ISBN_IS_REQUIRED)
-        books[index]['isbn'] = updatedBook['isbn']
+        books[index]['isbn'] = int(updatedBook['isbn'])
     if 'price' in updatedBook:
-        books[index]['price'] = updatedBook['price']
+        books[index]['price'] = float(updatedBook['price'])
     if 'obsolete' in updatedBook:
         books[index]['obsolete'] = updatedBook['obsolete']
     if 'bookType' in updatedBook:
-        books[index]['bookType'] = updatedBook['bookType']
+        books[index]['bookType'] = int(updatedBook['bookType'])
 
     saveData()
     return True    
