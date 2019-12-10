@@ -6,6 +6,7 @@ import json
 from config import Config
 from forms import EditBookForm, DeleteBookForm
 from converters import ConvertToTwoDecimals, ConvertBooleanToText, ConvertEnumBookTypeToDescription
+from model import Book
 
 app = Flask(__name__)
 
@@ -67,22 +68,21 @@ def detailsBook(id):
         bookList = []  
 
     for book in bookList:  
-        # TODO make use of a pre-defined class
         # There is one and only one book
-        orgBook = {
-            'id': book['id'], 
-            'name': book['name'],
-            'price': book['price'],  # Two decimals
-            'isbn': book['isbn'],
-            'obsolete': book['obsolete'],
-            'bookType': book['bookType']
-        }    
+        orgBook = Book (
+            book['id'], 
+            book['name'],
+            book['price'],  # Two decimals
+            book['isbn'],
+            book['obsolete'],
+            book['bookType']
+        )    
 
-    orgBook['price'] = ConvertToTwoDecimals(orgBook['price'])
-    orgBook['obsolete'] = ConvertBooleanToText(orgBook['obsolete'])
-    orgBook['bookType'] = ConvertEnumBookTypeToDescription(orgBook['bookType'])
+    orgBook.price = ConvertToTwoDecimals(orgBook.price)
+    orgBook.obsolete = ConvertBooleanToText(orgBook.obsolete)
+    orgBook.bookType = ConvertEnumBookTypeToDescription(orgBook.bookType)
 
-    return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook)
+    return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = vars(orgBook))
 
 # GET/POST /books/edit/<id>
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST'])
@@ -96,26 +96,26 @@ def editBook(id):
         bookList = []  
 
     for book in bookList:  
-        # TODO make use of a pre-defined class
         # There is one and only one book
-        orgBook = {
-            'id': book['id'], 
-            'name': book['name'],
-            'price': book['price'],
-            'isbn': book['isbn'],
-            'obsolete': book['obsolete'],
-            'bookType': book['bookType']
-        }  
+        # Use constructor b/c mutating members directly result in unpredictable data
+        orgBook = Book(
+            book['id'], 
+            book['name'],
+            book['price'],
+            book['isbn'],
+            book['obsolete'],
+            book['bookType']
+        )  
 
     form = EditBookForm()
 
     if request.method == 'GET':
-        form.id.data = orgBook['id']
-        form.name.data = orgBook['name']
-        form.price.data = orgBook['price']
-        form.isbn.data = orgBook['isbn']
-        form.obsolete.data = orgBook['obsolete']
-        form.bookType.data = orgBook['bookType']
+        form.id.data = orgBook.id
+        form.name.data = orgBook.name
+        form.price.data = orgBook.price
+        form.isbn.data = orgBook.isbn
+        form.obsolete.data = orgBook.obsolete
+        form.bookType.data = orgBook.bookType
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         newName = request.form['name']
@@ -123,17 +123,18 @@ def editBook(id):
         newPrice = request.form['price']
         newObsolete = form.obsolete.data  # TODO (bug) request.form['<booelan>'] does not return
         newBookType = request.form['bookType']
+
         deltaBook = {}
 
-        if newName.strip() != orgBook['name'].strip():
+        if newName.strip() != orgBook.name.strip():
             deltaBook['name'] = newName
-        if int(newIsbn) != int(orgBook['isbn']):  # Convert to int to have a precise comparison
+        if int(newIsbn) != int(orgBook.isbn):  # Convert to int to have a precise comparison
             deltaBook['isbn'] = newIsbn
-        if float(newPrice) != float(orgBook['price']):  # Convert to float to have a precise comparison
+        if float(newPrice) != float(orgBook.price):  # Convert to float to have a precise comparison
             deltaBook['price'] = newPrice
-        if newObsolete != orgBook['obsolete']: 
+        if newObsolete != orgBook.obsolete: 
             deltaBook['obsolete'] = newObsolete
-        if int(newBookType) != int(orgBook['bookType']):  # Convert to int to have a precise comparison
+        if int(newBookType) != int(orgBook.bookType):  # Convert to int to have a precise comparison
             deltaBook['bookType'] = newBookType
 
         if deltaBook <> {}:
@@ -150,60 +151,49 @@ def editBook(id):
 def addBook():
     global apiInfo
 
-    orgBook = {
-        'id': 0, 
-        'name': "",
-        'price': 0,
-        'isbn': None,
-        'obsolete': False,
-        'bookType': 0
-    }  
+    orgBook = Book()  
 
     form = EditBookForm()
 
     if request.method == 'GET':
-        form.id.data = orgBook['id']
-        form.name.data = orgBook['name']
-        form.price.data = orgBook['price']
-        form.isbn.data = orgBook['isbn']
-        form.obsolete.data = orgBook['obsolete']
-        form.bookType.data = orgBook['bookType']
+        form.id.data = orgBook.id
+        form.name.data = orgBook.name
+        form.price.data = orgBook.price
+        form.isbn.data = orgBook.isbn
+        form.obsolete.data = orgBook.obsolete
+        form.bookType.data = orgBook.bookType
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
-        deltaBook = {}
-        deltaBook['name'] = request.form['name']
-        deltaBook['isbn'] = request.form['isbn']
-        deltaBook['price'] = request.form['price']
-        deltaBook['obsolete'] = form.obsolete.data # TODO (bug) request.form['<booelan>'] does not return
-        deltaBook['bookType'] = request.form['bookType']
+        newBook = Book()
+        newBook.name = request.form['name']
+        newBook.isbn = request.form['isbn']
+        newBook.price = request.form['price']
+        newBook.obsolete = form.obsolete.data # TODO (bug) request.form['<booelan>'] does not return
+        newBook.bookType = request.form['bookType']
 
         # TODO (bug) Error when doing the api-call
-        requests.post(Config.API_ROOT_URL + '/books', json = deltaBook)
+        requests.post(Config.API_ROOT_URL + '/books', json = vars(newBook))
 
-        flash('Added book {}'.format(deltaBook))
+        flash('Added book {}'.format(vars(newBook)))
         return redirect('/books')      
 
-    return render_template('books/edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = vars(orgBook), form = form)
 
-# GET/POST /books/<id>
+# DELETE /books/<id>
 @app.route('/books/delete/<int:id>', methods=['GET', 'POST'])
 def deleteBook(id):
     global apiInfo
 
     try:
-        # Using eval to convert string to a dictionairy
         bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
     except:
         bookList = []  
 
     for book in bookList:  
-        # TODO make use of a pre-defined class
         # There is one and only one book
-        orgBook = {
-            'id': book['id'], 
-            'name': book['name']
-        }  
-
+        # Use constructor b/c mutating members directly result in unpredictable data
+        orgBook = Book(book['id'], book['name'])
+        
     form = DeleteBookForm()     
 
     if form.validate_on_submit():
@@ -212,7 +202,7 @@ def deleteBook(id):
         flash('Deleted book id = {}'.format(id))
         return redirect('/books')  
 
-    return render_template('books/delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = vars(orgBook), form = form)
 
 if __name__ == '__main__':
     apiInfo = getApiInfo()

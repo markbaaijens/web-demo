@@ -1,4 +1,4 @@
-from model import books, saveData, readData
+from model import books, saveData, readData, Book
 
 EXCEPTION_FIELD_ISBN_IS_REQUIRED =  'EXCEPTION_FIELD_ISBN_IS_REQUIRED'
 
@@ -19,19 +19,17 @@ def addBookLogic(newBookData):
     except:
         id = 0
     
-    # TODO Use class Book from model
-    newBook = {
-        'id': id, 
-        'name': newBookData.get('name', ''),
-        'price': newBookData.get('price', 0),
-        'isbn': newBookData.get('isbn', 0),
-        'obsolete': newBookData.get('obsolete', False),
-        'bookType': newBookData.get('bookType', 0)
-    }
+    newBook = Book()
+    newBook.id = id 
+    newBook.name = newBookData.get('name', '')
+    newBook.price = float(newBookData.get('price', 0))
+    newBook.isbn =  int(newBookData.get('isbn', 0))
+    newBook.obsolete = newBookData.get('obsolete', False)
+    newBook.bookType = int(newBookData.get('bookType', 0))
 
-    books.append(newBook)
+    books.append(vars(newBook))
     saveData()
-    return newBook
+    return vars(newBook)
 
 def editBookLogic(id, updatedBook):
     index = 0
@@ -45,13 +43,13 @@ def editBookLogic(id, updatedBook):
     if 'isbn' in updatedBook:
         if updatedBook['isbn'] == 0:
             raise Exception(EXCEPTION_FIELD_ISBN_IS_REQUIRED)
-        books[index]['isbn'] = updatedBook['isbn']
+        books[index]['isbn'] = int(updatedBook['isbn'])
     if 'price' in updatedBook:
-        books[index]['price'] = updatedBook['price']
+        books[index]['price'] = float(updatedBook['price'])
     if 'obsolete' in updatedBook:
         books[index]['obsolete'] = updatedBook['obsolete']
     if 'bookType' in updatedBook:
-        books[index]['bookType'] = updatedBook['bookType']
+        books[index]['bookType'] = int(updatedBook['bookType'])
 
     saveData()
     return True    
