@@ -7,7 +7,7 @@ books = []
 
 # TODO Strong typed class
 class Book():
-    def __init__(self, id, name, price, isbn, obsolete, bookType):
+    def __init__(self, id=0, name='', price=0, isbn=0, obsolete=False, bookType=0):
         self.id = id              # Integer
         self.name = name          # String(30)
         self.price = price        # Float

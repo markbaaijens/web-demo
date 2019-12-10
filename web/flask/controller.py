@@ -78,9 +78,9 @@ def detailsBook(id):
             book['bookType']
         )    
 
-    orgBook.price = ConvertToTwoDecimals(orgBook['price'])
-    orgBook.obsolete = ConvertBooleanToText(orgBook['obsolete'])
-    orgBook.bookType = ConvertEnumBookTypeToDescription(orgBook['bookType'])
+    orgBook.price = ConvertToTwoDecimals(orgBook.price)
+    orgBook.obsolete = ConvertBooleanToText(orgBook.obsolete)
+    orgBook.bookType = ConvertEnumBookTypeToDescription(orgBook.bookType)
 
     return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = vars(orgBook))
 
@@ -97,6 +97,7 @@ def editBook(id):
 
     for book in bookList:  
         # There is one and only one book
+        # TODO (bug) Converting this to Book objects result in unpredictable data result
         orgBook = {
             'id': book['id'], 
             'name': book['name'],
@@ -149,14 +150,7 @@ def editBook(id):
 def addBook():
     global apiInfo
 
-    orgBook = Book(
-        0, 
-        "",
-        0,
-        None,
-        False,
-        0
-    )  
+    orgBook = Book()  
 
     form = EditBookForm()
 
@@ -169,17 +163,17 @@ def addBook():
         form.bookType.data = orgBook.bookType
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
-        deltaBook = {}
-        deltaBook['name'] = request.form['name']
-        deltaBook['isbn'] = request.form['isbn']
-        deltaBook['price'] = request.form['price']
-        deltaBook['obsolete'] = form.obsolete.data # TODO (bug) request.form['<booelan>'] does not return
-        deltaBook['bookType'] = request.form['bookType']
+        newBook = Book()
+        newBook.name = request.form['name']
+        newBook.isbn = request.form['isbn']
+        newBook.price = request.form['price']
+        newBook.obsolete = form.obsolete.data # TODO (bug) request.form['<booelan>'] does not return
+        newBook.bookType = request.form['bookType']
 
         # TODO (bug) Error when doing the api-call
-        requests.post(Config.API_ROOT_URL + '/books', json = deltaBook)
+        requests.post(Config.API_ROOT_URL + '/books', json = vars(newBook))
 
-        flash('Added book {}'.format(deltaBook))
+        flash('Added book {}'.format(vars(newBook)))
         return redirect('/books')      
 
     return render_template('books/edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = vars(orgBook), form = form)
@@ -196,17 +190,11 @@ def deleteBook(id):
         bookList = []  
 
     for book in bookList:  
-        # TODO make use of a pre-defined class
         # There is one and only one book
-        orgBook = Book(
-            book['id'], 
-            book['name'],
-            0,
-            None,
-            False,
-            0            
-        )  
-
+        orgBook = Book()
+        orgBook.id = book['id'], 
+        orgBook.name = book['name'],
+        
     form = DeleteBookForm()     
 
     if form.validate_on_submit():
