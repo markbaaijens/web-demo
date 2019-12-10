@@ -97,25 +97,25 @@ def editBook(id):
 
     for book in bookList:  
         # There is one and only one book
-        # TODO (bug) Converting this to Book objects result in unpredictable data result
-        orgBook = {
-            'id': book['id'], 
-            'name': book['name'],
-            'price': book['price'],
-            'isbn': book['isbn'],
-            'obsolete': book['obsolete'],
-            'bookType': book['bookType']
-        }  
+        # Use constructor b/c mutating members directly result in unpredictable data
+        orgBook = Book(
+            book['id'], 
+            book['name'],
+            book['price'],
+            book['isbn'],
+            book['obsolete'],
+            book['bookType']
+        )  
 
     form = EditBookForm()
 
     if request.method == 'GET':
-        form.id.data = orgBook['id']
-        form.name.data = orgBook['name']
-        form.price.data = orgBook['price']
-        form.isbn.data = orgBook['isbn']
-        form.obsolete.data = orgBook['obsolete']
-        form.bookType.data = orgBook['bookType']
+        form.id.data = orgBook.id
+        form.name.data = orgBook.name
+        form.price.data = orgBook.price
+        form.isbn.data = orgBook.isbn
+        form.obsolete.data = orgBook.obsolete
+        form.bookType.data = orgBook.bookType
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         newName = request.form['name']
@@ -123,17 +123,18 @@ def editBook(id):
         newPrice = request.form['price']
         newObsolete = form.obsolete.data  # TODO (bug) request.form['<booelan>'] does not return
         newBookType = request.form['bookType']
+
         deltaBook = {}
 
-        if newName.strip() != orgBook['name'].strip():
+        if newName.strip() != orgBook.name.strip():
             deltaBook['name'] = newName
-        if int(newIsbn) != int(orgBook['isbn']):  # Convert to int to have a precise comparison
+        if int(newIsbn) != int(orgBook.isbn):  # Convert to int to have a precise comparison
             deltaBook['isbn'] = newIsbn
-        if float(newPrice) != float(orgBook['price']):  # Convert to float to have a precise comparison
+        if float(newPrice) != float(orgBook.price):  # Convert to float to have a precise comparison
             deltaBook['price'] = newPrice
-        if newObsolete != orgBook['obsolete']: 
+        if newObsolete != orgBook.obsolete: 
             deltaBook['obsolete'] = newObsolete
-        if int(newBookType) != int(orgBook['bookType']):  # Convert to int to have a precise comparison
+        if int(newBookType) != int(orgBook.bookType):  # Convert to int to have a precise comparison
             deltaBook['bookType'] = newBookType
 
         if deltaBook <> {}:
@@ -184,16 +185,14 @@ def deleteBook(id):
     global apiInfo
 
     try:
-        # Using eval to convert string to a dictionairy
         bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
     except:
         bookList = []  
 
     for book in bookList:  
         # There is one and only one book
-        orgBook = Book()
-        orgBook.id = book['id'], 
-        orgBook.name = book['name'],
+        # Use constructor b/c mutating members directly result in unpredictable data
+        orgBook = Book(book['id'], book['name'])
         
     form = DeleteBookForm()     
 
