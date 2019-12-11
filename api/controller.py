@@ -23,11 +23,16 @@ def invalidBodyError(error):
 def methodNotAllowedError(error):
     return make_response(jsonify({'message': 'Method ' + request.method + ' is not allowed on ' + request.url}), HTTP_METHOD_NOT_ALLOWED)
 
+def BuildResponse(statusCode, body, location):
+    response = make_response( body, statusCode)
+    response.headers['Location'] = location
+    return response
+
 # GET /api
 # curl -i http://localhost:5000/api
 @app.route('/api', methods=['GET'])
 def root():
-    return make_response(jsonify({'name': 'web-demo'}, {'version': '1.0'}), HTTP_OK)
+    return BuildResponse(HTTP_OK, jsonify({'name': 'web-demo'}, {'version': '1.0'}), request.url)
 
 # GET /api/books
 # curl -i http://localhost:5000/api/books
@@ -38,7 +43,7 @@ def getBooks():
     except Exception as e:
         return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
 
-    return make_response(jsonify(books), HTTP_OK)
+    return BuildResponse(HTTP_OK, jsonify(books), request.url)
 
 # GET /api/books/<id>
 # curl -i http://localhost:5000/api/books/1
@@ -47,11 +52,11 @@ def getBookById(id):
     try:
         book = getBookByIdLogic(id)
     except Exception as e:
-        return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
+        return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
     
     if len(book) == 0:
         abort(HTTP_NOT_FOUND)
-    return make_response(jsonify(book), HTTP_OK)
+    return BuildResponse(HTTP_OK, jsonify(book), request.url)
 
 # POST /api/books
 # curl -i http://localhost:5000/api/books -X POST -H "Content-Type: application/json" -d '{"isbn": 5, "name":"Name"}' 
@@ -65,9 +70,9 @@ def addBook():
     try:
         newBook = addBookLogic(request.json)
     except Exception as e:
-        return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
+        return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
     
-    return make_response(jsonify(newBook), HTTP_CREATED)
+    return BuildResponse(HTTP_CREATED, jsonify(newBook), request.url)
 
 # PATCH /api/books/<id>
 # curl -i http://localhost:5000/api/books/3 -X PATCH -H "Content-Type: application/json" -d '{"isbn": 66, "name":"Name"}'
@@ -85,9 +90,9 @@ def editBook(id):
     try:
         editBookLogic(id, requestData) 
     except Exception as e:
-        return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
+        return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
 
-    return make_response(jsonify(requestData), HTTP_OK)
+    return BuildResponse(HTTP_OK, jsonify(requestData), request.url)
 
 # DELETE /api/books/<id>
 # curl -i http://localhost:5000/api/books/3 -X DELETE
@@ -100,8 +105,8 @@ def deleteBook(id):
     try:
         deleteBookLogic(id)
     except Exception as e:
-        return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)        
-    return make_response("", HTTP_OK)
+        return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
+    return BuildResponse(HTTP_OK, '', request.url)
 
 if __name__ == '__main__':
     readData()
