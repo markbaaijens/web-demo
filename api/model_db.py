@@ -112,5 +112,3 @@ def editBookModel(id, updatedBook):
 def readData():
     pass
 
-def saveData():
-    pass
