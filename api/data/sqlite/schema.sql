@@ -8,4 +8,5 @@ CREATE TABLE IF NOT EXISTS "Books" (
 	"Obsolete" 	Boolean NOT NULL DEFAULT 'False',
 	"BookType"	Integer NOT NULL DEFAULT 0, CHECK (BookType >= 0 and BookType <= 3) 
 );
+CREATE INDEX IdIndex ON Books(Id);
 COMMIT;
