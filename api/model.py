@@ -10,7 +10,7 @@ class Book():
     def __init__(self, id=0, name='', price=0, isbn=0, obsolete=False, bookType=0):
         self.id = id              # Integer
         self.name = name          # String(30)
-        self.price = price        # Float
+        self.price = price        # Numeric
         self.isbn = isbn          # Integer
         self.obsolete = obsolete  # Boolean
         self.bookType = bookType  # Enum: 0 = Unknown, 1 = fiction, 2 = non-fiction, 3 = educational       
