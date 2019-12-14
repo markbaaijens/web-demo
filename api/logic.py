@@ -1,13 +1,13 @@
-from model import books, saveData, readData, Book
+from model_db import books, saveData, readData, Book, getAllBooksModel, getBookByIdModel, addBookModel, deleteBookModel, editBookModel
+#from model_file import books, saveData, readData, Book, getAllBooksModel, getBookByIdModel, addBookModel, deleteBookModel, editBookModel
 
 EXCEPTION_FIELD_ISBN_IS_REQUIRED =  'EXCEPTION_FIELD_ISBN_IS_REQUIRED'
 
 def getAllBookslogic():
-    return books
+    return getAllBooksModel()
 
 def getBookByIdLogic(id):
-    book = [book for book in books if book['id'] == id]
-    return book
+    return getBookByIdModel(id)
 
 def addBookLogic(newBookData):
     if newBookData['isbn'] == 0:
@@ -27,39 +27,14 @@ def addBookLogic(newBookData):
     newBook.obsolete = newBookData.get('obsolete', False)
     newBook.bookType = int(newBookData.get('bookType', 0))
 
-    books.append(vars(newBook))
-    saveData()
+    addBookModel(newBook)
+
     return vars(newBook)
 
 def editBookLogic(id, updatedBook):
-    index = 0
-    for book in books:
-        if book['id'] == id:
-            break
-        index += 1
-
-    if 'name' in updatedBook:
-        books[index]['name'] = updatedBook['name']
-    if 'isbn' in updatedBook:
-        if updatedBook['isbn'] == 0:
-            raise Exception(EXCEPTION_FIELD_ISBN_IS_REQUIRED)
-        books[index]['isbn'] = int(updatedBook['isbn'])
-    if 'price' in updatedBook:
-        books[index]['price'] = float(updatedBook['price'])
-    if 'obsolete' in updatedBook:
-        books[index]['obsolete'] = updatedBook['obsolete']
-    if 'bookType' in updatedBook:
-        books[index]['bookType'] = int(updatedBook['bookType'])
-
-    saveData()
+    editBookModel(id, updatedBook)
     return True    
 
 def deleteBookLogic(id):
-    index = 0
-    for book in books:
-        if book['id'] == id:
-            break
-        index += 1
-    books.remove(books[index])
-    saveData()
+    deleteBookModel(id)
     return True

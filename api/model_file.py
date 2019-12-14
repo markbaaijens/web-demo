@@ -41,6 +41,52 @@ def readData():
 
     return
 
+def getAllBooksModel():
+    return books
+
+def getBookByIdModel(id):
+    book = [book for book in books if book['id'] == id]
+    return book
+
+def addBookModel(newBook):
+    books.append(vars(newBook))
+    saveData()
+    return
+
+def deleteBookModel(id):
+    index = 0
+    for book in books:
+        if book['id'] == id:
+            break
+        index += 1
+    
+    books.remove(books[index])
+    saveData()
+    return
+
+def editBookModel(id, updatedBook):
+    index = 0
+    for book in books:
+        if book['id'] == id:
+            break
+        index += 1
+
+    if 'name' in updatedBook:
+        books[index]['name'] = updatedBook['name']
+    if 'isbn' in updatedBook:
+        if updatedBook['isbn'] == 0:
+            raise Exception(EXCEPTION_FIELD_ISBN_IS_REQUIRED)
+        books[index]['isbn'] = int(updatedBook['isbn'])
+    if 'price' in updatedBook:
+        books[index]['price'] = float(updatedBook['price'])
+    if 'obsolete' in updatedBook:
+        books[index]['obsolete'] = updatedBook['obsolete']
+    if 'bookType' in updatedBook:
+        books[index]['bookType'] = int(updatedBook['bookType'])
+
+    saveData()    
+    return
+
 '''
 # Manual methods to fill books-dictionairy
 
