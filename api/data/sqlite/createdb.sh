@@ -1,5 +1,6 @@
 #!/bin/bash
 # sudo chmod +x createdb.sh
+# ./createdb.sh
 
 DBFILE=data.db    
 if [ -f "$FILE" ]; then
