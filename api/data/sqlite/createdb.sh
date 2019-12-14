@@ -1,7 +1,7 @@
 #!/bin/bash
 # sudo chmod +x createdb.sh
 
-DBFILE=webdemo.db    
+DBFILE=data.db    
 if [ -f "$FILE" ]; then
    rm $DBFILE
 fi
