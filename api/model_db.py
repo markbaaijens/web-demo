@@ -47,6 +47,7 @@ def getBookByIdModel(id):
     con = sqlite3.connect(DB_FILE_NAME)
     con.row_factory = sqlite3.Row
     cur = con.cursor()
+    returnValue = []
     try:
         sql = 'select Id, ISBN, Name, Obsolete, Price, Booktype from Books where Id = %s;' % (id)
         cur.execute(sql)
@@ -63,11 +64,12 @@ def getBookByIdModel(id):
                 book['obsolete'],
                 book['bookType']
             )
+            returnValue = vars(newBook)
     finally:
         cur.close()
         con.close()
-    # TODO (db) Valid output when record not found
-    return vars(newBook)
+
+    return returnValue
 
 def addBookModel(newBook):
     con = sqlite3.connect(DB_FILE_NAME)   
