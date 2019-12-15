@@ -70,7 +70,7 @@ def addBookModel(newBook):
     con = sqlite3.connect(DB_FILE_NAME)   
     cur = con.cursor()
     try:
-        sql = 'insert into Books (Name, ISBN) values (\'%s\', %d);' % (newBook.name, newBook.isbn)
+        sql = 'insert into Books (Name, ISBN, Price, Obsolete, Booktype) values (\'%s\', %d, %f, %s, %d);' % (newBook.name, newBook.isbn, newBook.price, newBook.obsolete, newBook.bookType)
         cur.execute(sql)
         con.commit()
     finally:
