@@ -20,7 +20,6 @@ def addBookLogic(newBookData):
     newBook.obsolete = newBookData.get('obsolete', False)
     newBook.bookType = int(newBookData.get('bookType', 0))
 
-    print(vars(newBook))
     addBookModel(newBook)
 
     return vars(newBook)
