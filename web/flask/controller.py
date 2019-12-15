@@ -20,8 +20,8 @@ apiInfo = []
 def getApiInfo():
     try:
         # Using eval to convert string to a dictionairy
-        apiInfo = json.loads(requests.get(Config.API_ROOT_URL).content)
-        apiInfo.append({"url": Config.API_ROOT_URL})
+        apiInfo = json.loads(requests.get(app.config['API_ROOT_URL']).content)
+        apiInfo.append({"url": app.config['API_ROOT_URL']})
     except:
         apiInfo = []
 
@@ -32,7 +32,7 @@ def getApiInfo():
 def index():
     global apiInfo
 
-    return render_template('index.html', appTitle = Config.APP_TITLE, api = apiInfo)
+    return render_template('index.html', appTitle = app.config['APP_TITLE'], api = apiInfo)
 
 # GET /books
 @app.route('/books', methods=['GET'])
@@ -41,7 +41,7 @@ def listBook():
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books').content)
+        bookList = json.loads(requests.get(app.config['API_ROOT_URL'] + '/books').content)
     except:
         bookList = []
 
@@ -53,7 +53,7 @@ def listBook():
         book['obsolete'] = ConvertBooleanToText(book['obsolete'])
         book['bookType'] = ConvertEnumBookTypeToDescription(book['bookType'])
 
-    return render_template('books/list.html', appTitle = Config.APP_TITLE, api = apiInfo, books = bookList, 
+    return render_template('books/list.html', appTitle = app.config['APP_TITLE'], api = apiInfo, books = bookList, 
         nrOfBooks = nrOfBooks)
 
 # GET /books/<id>
@@ -63,7 +63,7 @@ def detailsBook(id):
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
+        bookList = json.loads(requests.get(app.config['API_ROOT_URL'] + '/books' + '/' + str(id)).content)
     except:
         bookList = []  
 
@@ -82,7 +82,7 @@ def detailsBook(id):
     orgBook.obsolete = ConvertBooleanToText(orgBook.obsolete)
     orgBook.bookType = ConvertEnumBookTypeToDescription(orgBook.bookType)
 
-    return render_template('books/details.html', actionTitle = 'Book details', appTitle = Config.APP_TITLE, api = apiInfo, book = vars(orgBook))
+    return render_template('books/details.html', actionTitle = 'Book details', appTitle = app.config['APP_TITLE'], api = apiInfo, book = vars(orgBook))
 
 # GET/POST /books/edit/<id>
 @app.route('/books/edit/<int:id>', methods=['GET', 'POST'])
@@ -91,7 +91,7 @@ def editBook(id):
 
     try:
         # Using eval to convert string to a dictionairy
-        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
+        bookList = json.loads(requests.get(app.config['API_ROOT_URL'] + '/books' + '/' + str(id)).content)
     except:
         bookList = []  
 
@@ -139,12 +139,12 @@ def editBook(id):
 
         if deltaBook != {}:
             # TODO (bug) Error when doing the api-call
-            requests.patch(Config.API_ROOT_URL + '/books' + '/' + str(id), json = deltaBook)
+            requests.patch(app.config['API_ROOT_URL'] + '/books' + '/' + str(id), json = deltaBook)
             flash('Saved book {}'.format(deltaBook))
             
         return redirect('/books/' + str(id))     
 
-    return render_template('books/edit.html', actionTitle = 'Edit book', appTitle = Config.APP_TITLE, api = apiInfo, book = orgBook, form = form)
+    return render_template('books/edit.html', actionTitle = 'Edit book', appTitle = app.config['APP_TITLE'], api = apiInfo, book = orgBook, form = form)
 
 # GET/POST /books/add
 @app.route('/books/add', methods=['GET', 'POST'])
@@ -172,12 +172,12 @@ def addBook():
         newBook.bookType = request.form['bookType']
 
         # TODO (bug) Error when doing the api-call
-        requests.post(Config.API_ROOT_URL + '/books', json = vars(newBook))
+        requests.post(app.config['API_ROOT_URL'] + '/books', json = vars(newBook))
 
         flash('Added book {}'.format(vars(newBook)))
         return redirect('/books')      
 
-    return render_template('books/edit.html', actionTitle = 'Add book', appTitle = Config.APP_TITLE, api = apiInfo, book = vars(orgBook), form = form)
+    return render_template('books/edit.html', actionTitle = 'Add book', appTitle = app.config['APP_TITLE'], api = apiInfo, book = vars(orgBook), form = form)
 
 # DELETE /books/<id>
 @app.route('/books/delete/<int:id>', methods=['GET', 'POST'])
@@ -185,7 +185,7 @@ def deleteBook(id):
     global apiInfo
 
     try:
-        bookList = json.loads(requests.get(Config.API_ROOT_URL + '/books' + '/' + str(id)).content)
+        bookList = json.loads(requests.get(app.config['API_ROOT_URL'] + '/books' + '/' + str(id)).content)
     except:
         bookList = []  
 
@@ -197,12 +197,12 @@ def deleteBook(id):
     form = DeleteBookForm()     
 
     if form.validate_on_submit():
-        requests.delete(Config.API_ROOT_URL + '/books' + '/' + str(id))
+        requests.delete(app.config['API_ROOT_URL'] + '/books' + '/' + str(id))
 
         flash('Deleted book id = {}'.format(id))
         return redirect('/books')  
 
-    return render_template('books/delete.html', actionTitle = 'Delete book', appTitle = Config.APP_TITLE, api = apiInfo, book = vars(orgBook), form = form)
+    return render_template('books/delete.html', actionTitle = 'Delete book', appTitle = app.config['APP_TITLE'], api = apiInfo, book = vars(orgBook), form = form)
 
 if __name__ == '__main__':
     apiInfo = getApiInfo()
