@@ -93,7 +93,7 @@ def addBookModel(newBook):
     return
 
 def deleteBookModel(id):
-    con = sqlite3.connect(DB_FILE_NAME)   
+    con = sqlite3.connect(app.config['DB_FILE_NAME'])   
     cur = con.cursor()
     try:
         sql = 'delete from Books where Id = %s;' % (id)
