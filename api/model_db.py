@@ -2,9 +2,7 @@ import json
 from os import path
 import sqlite3
 
-DATA_FILE_NAME = "./data/book.json"
-
-books = []
+DB_FILE_NAME = "data/data.db"
 
 # TODO Strong typed class
 class Book():
@@ -14,72 +12,82 @@ class Book():
         self.price = price        # Numeric
         self.isbn = isbn          # Integer
         self.obsolete = obsolete  # Boolean
-        self.bookType = bookType  # Enum: 0 = Unknown, 1 = fiction, 2 = non-fiction, 3 = educational       
+        self.bookType = bookType  # Enum: 0 = Unknown, 1 = fiction, 2 = non-fiction, 3 = educational    
 
 def getAllBooksModel():
-    con = sqlite3.connect('data/data.db')
+    con = sqlite3.connect(DB_FILE_NAME)
     con.row_factory = sqlite3.Row
-   
-    cur = con.cursor()
-    cur.execute('select Id, ISBN, Name, Obsolete, Price, Booktype from Books order by Id;')
-   
-    booksFromDb = cur.fetchall()
+    try:
+        cur = con.cursor()
+        sql = 'select Id, ISBN, Name, Obsolete, Price, Booktype from Books order by Id;'
+        cur.execute(sql)
+    
+        booksFromDb = cur.fetchall()
 
-    books = []
-    for book in booksFromDb:
-        newBook = Book (
-            book['id'], 
-            book['name'],
-            book['price'],
-            book['isbn'],
-            book['obsolete'],
-            book['bookType']
-        )
-        books.append(vars(newBook))
-
+        books = []
+        for book in booksFromDb:
+            newBook = Book (
+                book['id'], 
+                book['name'],
+                book['price'],
+                book['isbn'],
+                book['obsolete'],
+                book['bookType']
+            )
+            books.append(vars(newBook))
+    finally:
+        cur.close()
+        con.close()
     return books
 
 def getBookByIdModel(id):
-    con = sqlite3.connect('data/data.db')
+    con = sqlite3.connect(DB_FILE_NAME)
     con.row_factory = sqlite3.Row
-   
     cur = con.cursor()
-    cur.execute('select Id, ISBN, Name, Obsolete, Price, Booktype from Books where Id = %s;' % (id))
-   
-    booksFromDb = cur.fetchall()
+    try:
+        sql = 'select Id, ISBN, Name, Obsolete, Price, Booktype from Books where Id = %s;' % (id)
+        cur.execute(sql)
+    
+        booksFromDb = cur.fetchall()
 
-    for book in booksFromDb:
-        # There is one and only one book
-        newBook = Book (
-            book['id'], 
-            book['name'],
-            book['price'],
-            book['isbn'],
-            book['obsolete'],
-            book['bookType']
-        )
+        for book in booksFromDb:
+            # There is one and only one book
+            newBook = Book (
+                book['id'], 
+                book['name'],
+                book['price'],
+                book['isbn'],
+                book['obsolete'],
+                book['bookType']
+            )
+    finally:
+        cur.close()
+        con.close()
+    # TODO Valid output when record not found
     return vars(newBook)
 
 def addBookModel(newBook):
-    # TODO Implement addBookModel
-    '''
-    books.append(vars(newBook))
-    saveData()
-    '''
+    con = sqlite3.connect(DB_FILE_NAME)   
+    cur = con.cursor()
+    try:
+        sql = 'insert into Books (Name, ISBN) values (\'%s\', %d);' % (newBook.name, newBook.isbn)
+        cur.execute(sql)
+        con.commit()
+    finally:
+        cur.close()
+        con.close()
     return
 
 def deleteBookModel(id):
-    # TODO Implement deleteBookModel
-    ''' 
-    index = 0
-    for book in books:
-        if book['id'] == id:
-            break
-        index += 1
-    
-    books.remove(books[index])
-    saveData()
-    '''
+    con = sqlite3.connect(DB_FILE_NAME)   
+    cur = con.cursor()
+    try:
+        sql = 'delete from Books where Id = %s;' % (id)
+        cur.execute(sql)
+        con.commit()
+    finally:
+        cur.close()
+        con.close()
     return
 
 def editBookModel(id, updatedBook):
