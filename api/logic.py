@@ -23,7 +23,7 @@ def addBookLogic(newBookData):
     newBook.id = id 
     newBook.name = newBookData.get('name', '')
     newBook.price = float(newBookData.get('price', 0))
-    newBook.isbn =  int(newBookData.get('isbn', 0))
+    newBook.isbn = int(newBookData.get('isbn', 0))
     newBook.obsolete = newBookData.get('obsolete', False)
     newBook.bookType = int(newBookData.get('bookType', 0))
 
@@ -52,7 +52,7 @@ def editBookLogic(id, updatedBook):
         books[index]['bookType'] = int(updatedBook['bookType'])
 
     saveData()
-    return True    
+    return   
 
 def deleteBookLogic(id):
     index = 0
@@ -62,4 +62,4 @@ def deleteBookLogic(id):
         index += 1
     books.remove(books[index])
     saveData()
-    return True
+    return
