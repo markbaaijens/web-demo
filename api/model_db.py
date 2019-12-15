@@ -63,7 +63,7 @@ def getBookByIdModel(id):
     finally:
         cur.close()
         con.close()
-    # TODO Valid output when record not found
+    # TODO (db) Valid output when record not found
     return vars(newBook)
 
 def addBookModel(newBook):
@@ -91,7 +91,7 @@ def deleteBookModel(id):
     return
 
 def editBookModel(id, updatedBook):
-    # TODO Implement editBookModel
+    # TODO (db) Implement editBookModel
     '''
     index = 0
     for book in books:

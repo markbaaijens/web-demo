@@ -23,6 +23,7 @@ def saveData():
     return
 
 def readData():
+    # TODO (db) Execute on initialise; remove from controller
     if not path.exists(DATA_FILE_NAME):
         return
 
