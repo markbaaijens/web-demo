@@ -57,7 +57,6 @@ def listBook():
         nrOfBooks = nrOfBooks)
 
 # GET /books/<id>
-# TODO (db) Fails to open; also on edit and delete
 @app.route('/books/<int:id>', methods=['GET'])
 def detailsBook(id):
     global apiInfo

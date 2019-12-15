@@ -50,6 +50,13 @@ def getBookByIdModel(id):
     return book
 
 def addBookModel(newBook):
+    try:   
+        # This will bounce when books is empty
+        id = books[-1]['id'] + 1
+    except:
+        id = 0
+    newBook.id = id
+
     books.append(vars(newBook))
     saveData()
     return
