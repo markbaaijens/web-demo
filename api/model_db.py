@@ -64,7 +64,7 @@ def getBookByIdModel(id):
                 book['obsolete'],
                 book['bookType']
             )
-            returnValue = vars(newBook)
+            returnValue = [vars(newBook)]
     finally:
         cur.close()
         con.close()
