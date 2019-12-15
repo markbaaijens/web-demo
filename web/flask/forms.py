@@ -26,8 +26,8 @@ class EditBookForm(FlaskForm):
     def validate_name(self, field):
         if field.data == '':  
             raise ValueError('Field is required')
-        if len(field.data) > 50:
-            raise ValueError('Maximum size is 5 characters')
+        if len(field.data) > 30:
+            raise ValueError('Maximum size is 30 characters')
         pass
 
     def validate_isbn(self, field):

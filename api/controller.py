@@ -63,9 +63,7 @@ def getBookById(id):
 def addBook():
     if not request.json:
         abort(HTTP_BAD_REQUEST)
-    if not 'isbn' in request.json:
-        abort(HTTP_BAD_REQUEST)
-        
+
     try:
         newBook = addBookLogic(request.json)
     except Exception as e:
