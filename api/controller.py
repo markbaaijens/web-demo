@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, abort, make_response, request
+
 from logic import addBookLogic, editBookLogic, deleteBookLogic
 from logic import getAllBookslogic, getBookByIdLogic
+from config import Config
 
 HTTP_OK = 200
 HTTP_CREATED = 201
@@ -9,6 +11,8 @@ HTTP_NOT_FOUND = 404
 HTTP_METHOD_NOT_ALLOWED = 405
 
 app = Flask(__name__)
+
+app.config.from_object(Config)
 
 @app.errorhandler(HTTP_NOT_FOUND)
 def notFoundError(error):
