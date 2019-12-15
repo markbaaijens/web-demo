@@ -2,8 +2,6 @@ import json
 from os import path
 import sqlite3
 
-DB_FILE_NAME = "data/data.db"
-
 # TODO (db) Proper capitalisation of fieldnames
 
 # TODO Strong typed class
@@ -29,7 +27,7 @@ class Books:
         return editBookModel(id, updatedBook)
 
 def getAllBooksModel():
-    con = sqlite3.connect(DB_FILE_NAME)
+    con = sqlite3.connect(app.config['DB_FILE_NAME'])
     con.row_factory = sqlite3.Row
     try:
         cur = con.cursor()
@@ -55,7 +53,7 @@ def getAllBooksModel():
     return books
 
 def getBookByIdModel(id):
-    con = sqlite3.connect(DB_FILE_NAME)
+    con = sqlite3.connect(app.config['DB_FILE_NAME'])
     con.row_factory = sqlite3.Row
     cur = con.cursor()
     returnValue = []
@@ -83,7 +81,7 @@ def getBookByIdModel(id):
     return returnValue
 
 def addBookModel(newBook):
-    con = sqlite3.connect(DB_FILE_NAME)   
+    con = sqlite3.connect(app.config['DB_FILE_NAME'])   
     cur = con.cursor()
     try:
         sql = 'insert into Books (Name, ISBN, Price, Obsolete, Booktype) values (\'%s\', %d, %f, %s, %d);' % (newBook.name, newBook.isbn, newBook.price, newBook.obsolete, newBook.bookType)
@@ -107,7 +105,7 @@ def deleteBookModel(id):
     return
 
 def editBookModel(id, updatedBook):
-    con = sqlite3.connect(DB_FILE_NAME)   
+    con = sqlite3.connect(app.config['DB_FILE_NAME'])   
     cur = con.cursor()
     try:
         sql = 'update Books set '
