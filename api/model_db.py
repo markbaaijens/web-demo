@@ -4,6 +4,9 @@ import sqlite3
 
 DB_FILE_NAME = "data/data.db"
 
+# TODO (db) Create Books class with method All, Single, Add, Edit, Delete
+# TODO (db) Proper capitalisation of fieldnames
+
 # TODO Strong typed class
 class Book():
     def __init__(self, id=0, name='', price=0, isbn=0, obsolete=False, bookType=0):
