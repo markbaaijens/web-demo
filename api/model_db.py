@@ -96,31 +96,31 @@ def deleteBookModel(id):
     return
 
 def editBookModel(id, updatedBook):
-    # TODO (db) Implement editBookModel
-    '''
-    index = 0
-    for book in books:
-        if book['id'] == id:
-            break
-        index += 1
+    con = sqlite3.connect(DB_FILE_NAME)   
+    cur = con.cursor()
+    try:
+        sql = 'update Books set '
 
-    if 'name' in updatedBook:
-        books[index]['name'] = updatedBook['name']
-    if 'isbn' in updatedBook:
-        if updatedBook['isbn'] == 0:
-            raise Exception(EXCEPTION_FIELD_ISBN_IS_REQUIRED)
-        books[index]['isbn'] = int(updatedBook['isbn'])
-    if 'price' in updatedBook:
-        books[index]['price'] = float(updatedBook['price'])
-    if 'obsolete' in updatedBook:
-        books[index]['obsolete'] = updatedBook['obsolete']
-    if 'bookType' in updatedBook:
-        books[index]['bookType'] = int(updatedBook['bookType'])
+        if 'name' in updatedBook:
+            sql = sql + 'Name = \'%s\'' % (updatedBook['name']) + ', '
+        if 'isbn' in updatedBook:
+            sql = sql + 'ISBN = %d' % (int(updatedBook['isbn'])) + ', '
+        if 'price' in updatedBook:
+            sql = sql + 'Price = %f' % (float(updatedBook['price'])) + ', '
+        if 'obsolete' in updatedBook:
+            sql = sql + 'Obsolete = %d' % (updatedBook['obsolete']) + ', '
+        if 'bookType' in updatedBook:
+            sql = sql + 'BookType = %d' % (int(updatedBook['bookType'])) + ', '  
+        sql = sql[:-2]  # Trim last comma
 
-    saveData()    
-    '''
+        sql = sql + ' ' + 'where Id = %d' % (id)
+
+        cur.execute(sql)
+        con.commit()
+    finally:
+        cur.close()
+        con.close()
     return
-
 
 def readData():
     pass
