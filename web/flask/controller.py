@@ -137,7 +137,7 @@ def editBook(id):
         if int(newBookType) != int(orgBook.bookType):  # Convert to int to have a precise comparison
             deltaBook['bookType'] = newBookType
 
-        if deltaBook <> {}:
+        if deltaBook != {}:
             # TODO (bug) Error when doing the api-call
             requests.patch(Config.API_ROOT_URL + '/books' + '/' + str(id), json = deltaBook)
             flash('Saved book {}'.format(deltaBook))

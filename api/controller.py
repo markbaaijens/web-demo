@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, abort, make_response, request
 from logic import addBookLogic, editBookLogic, deleteBookLogic
 from logic import getAllBookslogic, getBookByIdLogic
-from logic import readData
 
 HTTP_OK = 200
 HTTP_CREATED = 201
@@ -109,7 +108,6 @@ def deleteBook(id):
     return BuildResponse(HTTP_OK, '', request.url)
 
 if __name__ == '__main__':
-    readData()
     app.run(port=5000, debug=True)  # auto-reload, only localhoast
 #    app.run(host='0.0.0.0', port=5000)  # public server, reachable from remote
 
