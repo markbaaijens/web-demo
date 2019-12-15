@@ -76,6 +76,7 @@ def editBookModel(id, updatedBook):
         books[index]['name'] = updatedBook['name']
     if 'isbn' in updatedBook:
         if updatedBook['isbn'] == 0:
+            # TODO (db) string EXCEPTION_FIELD_ISBN_IS_REQUIRED not found
             raise Exception(EXCEPTION_FIELD_ISBN_IS_REQUIRED)
         books[index]['isbn'] = int(updatedBook['isbn'])
     if 'price' in updatedBook:
