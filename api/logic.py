@@ -1,5 +1,5 @@
-from model_db import readData, Book, getAllBooksModel, getBookByIdModel, addBookModel, deleteBookModel, editBookModel
-#from model_file import readData, Book, getAllBooksModel, getBookByIdModel, addBookModel, deleteBookModel, editBookModel
+#from model_db import Book, getAllBooksModel, getBookByIdModel, addBookModel, deleteBookModel, editBookModel
+from model_file import Book, getAllBooksModel, getBookByIdModel, addBookModel, deleteBookModel, editBookModel
 
 EXCEPTION_FIELD_ISBN_IS_REQUIRED = 'EXCEPTION_FIELD_ISBN_IS_REQUIRED'
 

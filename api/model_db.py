@@ -4,6 +4,8 @@ import sqlite3
 
 DB_FILE_NAME = "data/data.db"
 
+print('model_db')
+
 # TODO (db) Create Books class with method All, Single, Add, Edit, Delete
 # TODO (db) Proper capitalisation of fieldnames
 
@@ -121,7 +123,4 @@ def editBookModel(id, updatedBook):
         cur.close()
         con.close()
     return
-
-def readData():
-    pass
 

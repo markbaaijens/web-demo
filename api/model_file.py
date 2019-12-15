@@ -23,7 +23,6 @@ def saveData():
     return
 
 def readData():
-    # TODO (db) Execute on initialise; remove from controller
     if not path.exists(DATA_FILE_NAME):
         return
 
@@ -114,3 +113,7 @@ books.append(newBook.__dict__)
 newBook = Book(3, "Boek 3", 30, 33)
 books.append(newBook.__dict__)
 '''
+
+# Execute on load
+readData()
+
