@@ -4,7 +4,6 @@ import sqlite3
 
 DB_FILE_NAME = "data/data.db"
 
-# TODO (db) Create Books class with method All, Single, Add, Edit, Delete
 # TODO (db) Proper capitalisation of fieldnames
 
 # TODO Strong typed class
@@ -16,6 +15,18 @@ class Book():
         self.isbn = isbn          # Integer
         self.obsolete = obsolete  # Boolean
         self.bookType = bookType  # Enum: 0 = Unknown, 1 = fiction, 2 = non-fiction, 3 = educational    
+
+class Books:
+    def All(self):
+        return getAllBooksModel()
+    def Single(self, id):
+        return getBookByIdModel(id)
+    def Add(self, newBook):
+        return addBookModel(newBook)
+    def Delete(self, id):
+        return deleteBookModel(id)
+    def Edit(self, id, updatedBook):
+        return editBookModel(id, updatedBook)
 
 def getAllBooksModel():
     con = sqlite3.connect(DB_FILE_NAME)
