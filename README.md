@@ -9,6 +9,16 @@ OS:
 Python packages
 - pip install -r requirements.txt
 
+Start API
+- cd api
+- python controller.py
+Access: localhost:5000
+
+Start webserver:
+- cd web/flask
+- python controller.py
+Access: localhost:5001
+
 TODO 
 - logging
 - authentication/authorisation (token)
