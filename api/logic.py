@@ -1,13 +1,13 @@
 from model_db import Book, Books
 #from model_file import Book, Books
 
-def getAllBookslogic():
+def getAllBooks():
     return Books().All()
 
-def getBookByIdLogic(id):
+def getBookById(id):
     return Books().Single(id)
 
-def addBookLogic(newBookData):    
+def addBook(newBookData):    
     newBook = Book()
     newBook.name = newBookData.get('name', '')
     newBook.price = float(newBookData.get('price', 0))
@@ -23,7 +23,7 @@ def addBookLogic(newBookData):
 
     return vars(newBook)
 
-def editBookLogic(id, updatedBook):
+def editBook(id, updatedBook):
     if 'name' in updatedBook:
         validateName(updatedBook['name'])
     if 'isbn' in updatedBook:
@@ -34,7 +34,7 @@ def editBookLogic(id, updatedBook):
     Books().Edit(id, updatedBook)
     return    
 
-def deleteBookLogic(id):
+def deleteBook(id):
     Books().Delete(id)
     return
 

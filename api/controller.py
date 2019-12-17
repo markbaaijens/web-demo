@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, abort, make_response, request
 
-from logic import addBookLogic, editBookLogic, deleteBookLogic
-from logic import getAllBookslogic, getBookByIdLogic
+import logic 
 from config import Config
 
 HTTP_OK = 200
@@ -42,7 +41,7 @@ def root():
 @app.route('/api/books', methods=['GET'])
 def getBooks():
     try:
-        books = getAllBookslogic()
+        books = logic.getAllBooks()
     except Exception as e:
         return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
 
@@ -53,7 +52,7 @@ def getBooks():
 @app.route('/api/books/<int:id>', methods=['GET'])
 def getBookById(id):
     try:
-        book = getBookByIdLogic(id)
+        book = logic.getBookById(id)
     except Exception as e:
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
     
@@ -69,7 +68,7 @@ def addBook():
         abort(HTTP_BAD_REQUEST)
 
     try:
-        newBook = addBookLogic(request.json)
+        newBook = logic.addBook(request.json)
     except Exception as e:
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
     
@@ -82,14 +81,14 @@ def editBook(id):
     if not request.json:
         abort(HTTP_BAD_REQUEST)
 
-    book = getBookByIdLogic(id)
+    book = logic.getBookById(id)
     if len(book) == 0:
         abort(HTTP_NOT_FOUND)
 
     requestData = request.get_json()
 
     try:
-        editBookLogic(id, requestData) 
+        logic.editBook(id, requestData) 
     except Exception as e:
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
 
@@ -99,12 +98,12 @@ def editBook(id):
 # curl -i http://localhost:5000/api/books/3 -X DELETE
 @app.route('/api/books/<int:id>', methods=['DELETE'])
 def deleteBook(id):
-    book = getBookByIdLogic(id)
+    book = logic.getBookById(id)
     if len(book) == 0:
         abort(HTTP_NOT_FOUND)
 
     try:
-        deleteBookLogic(id)
+        logic.deleteBook(id)
     except Exception as e:
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
     return BuildResponse(HTTP_OK, '', request.url)
