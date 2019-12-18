@@ -62,7 +62,8 @@ def getBookByIdModel(id):
     try:
         sql = 'select Id, ISBN, Name, Obsolete, Price, Booktype from Books where Id = %s;' % (id)
         cur.execute(sql)
-    
+
+        # TODO Use fetchone instead of fetchall
         booksFromDb = cur.fetchall()
 
         for book in booksFromDb:
