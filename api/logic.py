@@ -19,6 +19,7 @@ def addBook(newBookData):
     validateISBN(newBook.isbn)
     validateBookType(newBook.bookType)
 
+    # TODO (db) Return new value for Id
     Books().Add(newBook)
 
     return vars(newBook)

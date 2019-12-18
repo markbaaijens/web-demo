@@ -141,7 +141,8 @@ def editBook(id):
             # TODO (bug) Error when doing the api-call
             requests.patch(app.config['API_ROOT_URL'] + '/books' + '/' + str(id), json = deltaBook)
             flash('Saved book {}'.format(deltaBook))
-            
+
+        # TODO After insert, redirect to book-details            
         return redirect('/books/' + str(id))     
 
     return render_template('books/edit.html', actionTitle = 'Edit book', appTitle = app.config['APP_TITLE'], api = apiInfo, book = orgBook, form = form)
