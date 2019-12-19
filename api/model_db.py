@@ -21,17 +21,17 @@ class Book():
 
 class Books:
     def All(self):
-        return getAllBooksModel()
+        return getAllBooks()
     def Single(self, id):
-        return getBookByIdModel(id)
+        return getBookById(id)
     def Add(self, newBook):
-        return addBookModel(newBook)
+        return addBook(newBook)
     def Delete(self, id):
-        return deleteBookModel(id)
+        return deleteBook(id)
     def Edit(self, id, updatedBook):
-        return editBookModel(id, updatedBook)
+        return editBook(id, updatedBook)
 
-def getAllBooksModel():
+def getAllBooks():
     con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])
     con.row_factory = sqlite3.Row
     try:
@@ -57,7 +57,7 @@ def getAllBooksModel():
         con.close()
     return books
 
-def getBookByIdModel(id):
+def getBookById(id):
     con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])
     con.row_factory = sqlite3.Row
     cur = con.cursor()
@@ -86,7 +86,7 @@ def getBookByIdModel(id):
 
     return returnValue
 
-def addBookModel(newBook):
+def addBook(newBook):
     con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
     cur = con.cursor()
     try:
@@ -98,7 +98,7 @@ def addBookModel(newBook):
         con.close()
     return
 
-def deleteBookModel(id):
+def deleteBook(id):
     con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
     cur = con.cursor()
     try:
@@ -110,7 +110,7 @@ def deleteBookModel(id):
         con.close()
     return
 
-def editBookModel(id, updatedBook):
+def editBook(id, updatedBook):
     con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
     cur = con.cursor()
     try:

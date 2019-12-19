@@ -21,15 +21,15 @@ class Book():
 
 class Books:
     def All(self):
-        return getAllBooksModel()
+        return getAllBooks()
     def Single(self, id):
-        return getBookByIdModel(id)
+        return getBookById(id)
     def Add(self, newBook):
-        return addBookModel(newBook)
+        return addBook(newBook)
     def Delete(self, id):
-        return deleteBookModel(id)
+        return deleteBook(id)
     def Edit(self, id, updatedBook):
-        return editBookModel(id, updatedBook)
+        return editBook(id, updatedBook)
 
 def saveData():
     datasAsJson = json.dumps(books)
@@ -57,14 +57,14 @@ def readData():
 
     return
 
-def getAllBooksModel():
+def getAllBooks():
     return books
 
-def getBookByIdModel(id):
+def getBookById(id):
     book = [book for book in books if book['id'] == id]
     return book
 
-def addBookModel(newBook):
+def addBook(newBook):
     try:   
         # This will bounce when books is empty
         id = books[-1]['id'] + 1
@@ -76,7 +76,7 @@ def addBookModel(newBook):
     saveData()
     return
 
-def deleteBookModel(id):
+def deleteBook(id):
     index = 0
     for book in books:
         if book['id'] == id:
@@ -87,7 +87,7 @@ def deleteBookModel(id):
     saveData()
     return
 
-def editBookModel(id, updatedBook):
+def editBook(id, updatedBook):
     index = 0
     for book in books:
         if book['id'] == id:
