@@ -65,21 +65,16 @@ def getBookById(id):
     try:
         sql = 'select Id, ISBN, Name, Obsolete, Price, Booktype from Books where Id = %s;' % (id)
         cur.execute(sql)
-
-        # TODO Use fetchone instead of fetchall
-        booksFromDb = cur.fetchall()
-
-        for book in booksFromDb:
-            # There is one and only one book
-            newBook = Book (
-                book['id'], 
-                book['name'],
-                book['price'],
-                book['isbn'],
-                book['obsolete'],
-                book['bookType']
-            )
-            returnValue = [vars(newBook)]
+        booksFromDb = [cur.fetchone()]
+        newBook = Book (
+            booksFromDb[0]['id'], 
+            booksFromDb[0]['name'],
+            booksFromDb[0]['price'],
+            booksFromDb[0]['isbn'],
+            booksFromDb[0]['obsolete'],
+            booksFromDb[0]['bookType']
+        )
+        returnValue = [vars(newBook)]
     finally:
         cur.close()
         con.close()
