@@ -1,6 +1,10 @@
 import json
 from os import path
 
+import globals
+
+globals.engine = 'file'
+
 DATA_FILE_NAME = "./data/book.json"
 
 books = []
