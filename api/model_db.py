@@ -88,11 +88,14 @@ def addBook(newBook):
     try:
         sql = 'insert into Books (Name, ISBN, Price, IsObsolete, Booktype) values (\'%s\', %d, %f, %s, %d);' % (newBook.name, newBook.isbn, newBook.price, newBook.isObsolete, newBook.bookType)
         cur.execute(sql)
+        newId = cur.execute('SELECT last_insert_rowid()')
         con.commit()
     finally:
         cur.close()
         con.close()
-    return
+
+    print(newId)
+    return newId
 
 def deleteBook(id):
     con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
