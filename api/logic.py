@@ -1,5 +1,5 @@
-from model_db import Book, Books
-#from model_file import Book, Books
+#from model_db import Book, Books
+from model_file import Book, Books
 
 def getAllBooks():
     return Books().All()
@@ -12,7 +12,7 @@ def addBook(newBookData):
     newBook.name = newBookData.get('name', '')
     newBook.price = float(newBookData.get('price', 0))
     newBook.isbn = int(newBookData.get('isbn', 0))
-    newBook.obsolete = newBookData.get('obsolete', False)
+    newBook.isObsolete = newBookData.get('isObsolete', False)
     newBook.bookType = int(newBookData.get('bookType', 0))
 
     validateName(newBook.name)

@@ -11,12 +11,12 @@ globals.engine = 'sqlite'
 
 # TODO Strong typed class
 class Book():
-    def __init__(self, id=0, name='', price=0, isbn=0, obsolete=False, bookType=0):
+    def __init__(self, id=0, name='', price=0, isbn=0, isObsolete=False, bookType=0):
         self.id = id              # Integer
         self.name = name          # String(30)
         self.price = price        # Numeric
         self.isbn = isbn          # Integer
-        self.obsolete = obsolete  # Boolean
+        self.isObsolete = isObsolete  # Boolean
         self.bookType = bookType  # Enum: 0 = Unknown, 1 = fiction, 2 = non-fiction, 3 = educational    
 
 class Books:
@@ -36,7 +36,7 @@ def getAllBooks():
     con.row_factory = sqlite3.Row
     try:
         cur = con.cursor()
-        sql = 'select Id, ISBN, Name, Obsolete, Price, Booktype from Books order by Id;'
+        sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books order by Id;'
         cur.execute(sql)
     
         booksFromDb = cur.fetchall()
@@ -48,7 +48,7 @@ def getAllBooks():
                 book['name'],
                 book['price'],
                 book['isbn'],
-                book['obsolete'],
+                book['isObsolete'],
                 book['bookType']
             )
             books.append(vars(newBook))
@@ -63,7 +63,7 @@ def getBookById(id):
     cur = con.cursor()
     returnValue = []
     try:
-        sql = 'select Id, ISBN, Name, Obsolete, Price, Booktype from Books where Id = %s;' % (id)
+        sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books where Id = %s;' % (id)
         cur.execute(sql)
         booksFromDb = [cur.fetchone()]
         if booksFromDb != [None]:
@@ -72,7 +72,7 @@ def getBookById(id):
                 booksFromDb[0]['name'],
                 booksFromDb[0]['price'],
                 booksFromDb[0]['isbn'],
-                booksFromDb[0]['obsolete'],
+                booksFromDb[0]['isObsolete'],
                 booksFromDb[0]['bookType']
             )
             returnValue = [vars(newBook)]
@@ -86,7 +86,7 @@ def addBook(newBook):
     con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
     cur = con.cursor()
     try:
-        sql = 'insert into Books (Name, ISBN, Price, Obsolete, Booktype) values (\'%s\', %d, %f, %s, %d);' % (newBook.name, newBook.isbn, newBook.price, newBook.obsolete, newBook.bookType)
+        sql = 'insert into Books (Name, ISBN, Price, IsObsolete, Booktype) values (\'%s\', %d, %f, %s, %d);' % (newBook.name, newBook.isbn, newBook.price, newBook.isObsolete, newBook.bookType)
         cur.execute(sql)
         con.commit()
     finally:
@@ -118,8 +118,8 @@ def editBook(id, updatedBook):
             sql = sql + 'ISBN = %d' % (int(updatedBook['isbn'])) + ', '
         if 'price' in updatedBook:
             sql = sql + 'Price = %f' % (float(updatedBook['price'])) + ', '
-        if 'obsolete' in updatedBook:
-            sql = sql + 'Obsolete = %d' % (updatedBook['obsolete']) + ', '
+        if 'isObsolete' in updatedBook:
+            sql = sql + 'IsObsolete = %d' % (updatedBook['isObsolete']) + ', '
         if 'bookType' in updatedBook:
             sql = sql + 'BookType = %d' % (int(updatedBook['bookType'])) + ', '  
         sql = sql[:-2]  # Trim last comma

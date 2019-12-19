@@ -50,7 +50,7 @@ def listBook():
     # Some formatting 
     for book in bookList:
         book['price'] = ConvertToTwoDecimals(book['price'])
-        book['obsolete'] = ConvertBooleanToText(book['obsolete'])
+        book['isObsolete'] = ConvertBooleanToText(book['isObsolete'])
         book['bookType'] = ConvertEnumBookTypeToDescription(book['bookType'])
 
     return render_template('books/list.html', appTitle = app.config['APP_TITLE'], api = apiInfo, books = bookList, 
@@ -74,12 +74,12 @@ def detailsBook(id):
             book['name'],
             book['price'],  # Two decimals
             book['isbn'],
-            book['obsolete'],
+            book['isObsolete'],
             book['bookType']
         )    
 
     orgBook.price = ConvertToTwoDecimals(orgBook.price)
-    orgBook.obsolete = ConvertBooleanToText(orgBook.obsolete)
+    orgBook.isObsolete = ConvertBooleanToText(orgBook.isObsolete)
     orgBook.bookType = ConvertEnumBookTypeToDescription(orgBook.bookType)
 
     return render_template('books/details.html', actionTitle = 'Book details', appTitle = app.config['APP_TITLE'], api = apiInfo, book = vars(orgBook))
@@ -103,7 +103,7 @@ def editBook(id):
             book['name'],
             book['price'],
             book['isbn'],
-            book['obsolete'],
+            book['isObsolete'],
             book['bookType']
         )  
 
@@ -114,14 +114,14 @@ def editBook(id):
         form.name.data = orgBook.name
         form.price.data = orgBook.price
         form.isbn.data = orgBook.isbn
-        form.obsolete.data = orgBook.obsolete
+        form.isObsolete.data = orgBook.isObsolete
         form.bookType.data = orgBook.bookType
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
         newName = request.form['name']
         newIsbn = request.form['isbn']
         newPrice = request.form['price']
-        newObsolete = form.obsolete.data  # TODO (bug) request.form['<booelan>'] does not return
+        newObsolete = form.isObsolete.data  # TODO (bug) request.form['<booelan>'] does not return
         newBookType = request.form['bookType']
 
         deltaBook = {}
@@ -132,8 +132,8 @@ def editBook(id):
             deltaBook['isbn'] = newIsbn
         if float(newPrice) != float(orgBook.price):  # Convert to float to have a precise comparison
             deltaBook['price'] = newPrice
-        if newObsolete != orgBook.obsolete: 
-            deltaBook['obsolete'] = newObsolete
+        if newObsolete != orgBook.isObsolete: 
+            deltaBook['isObsolete'] = newObsolete
         if int(newBookType) != int(orgBook.bookType):  # Convert to int to have a precise comparison
             deltaBook['bookType'] = newBookType
 
@@ -161,7 +161,7 @@ def addBook():
         form.name.data = orgBook.name
         form.price.data = orgBook.price
         form.isbn.data = orgBook.isbn
-        form.obsolete.data = orgBook.obsolete
+        form.isObsolete.data = orgBook.isObsolete
         form.bookType.data = orgBook.bookType
 
     if request.method == 'POST' and form.validate():  # Equivalent to validate_on_submit()
@@ -169,7 +169,7 @@ def addBook():
         newBook.name = request.form['name']
         newBook.isbn = request.form['isbn']
         newBook.price = request.form['price']
-        newBook.obsolete = form.obsolete.data # TODO (bug) request.form['<booelan>'] does not return
+        newBook.isObsolete = form.isObsolete.data # TODO (bug) request.form['<booelan>'] does not return
         newBook.bookType = request.form['bookType']
 
         # TODO (bug) Error when doing the api-call

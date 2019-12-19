@@ -11,12 +11,12 @@ books = []
 
 # TODO Strong typed class
 class Book():
-    def __init__(self, id=0, name='', price=0, isbn=0, obsolete=False, bookType=0):
+    def __init__(self, id=0, name='', price=0, isbn=0, isObsolete=False, bookType=0):
         self.id = id              # Integer
         self.name = name          # String(30)
         self.price = price        # Numeric
         self.isbn = isbn          # Integer
-        self.obsolete = obsolete  # Boolean
+        self.isObsolete = isObsolete  # Boolean
         self.bookType = bookType  # Enum: 0 = Unknown, 1 = fiction, 2 = non-fiction, 3 = educational       
 
 class Books:
@@ -50,7 +50,7 @@ def readData():
             book['name'],
             book['price'],
             book['isbn'],
-            book['obsolete'],
+            book['isObsolete'],
             book['bookType']
         )
         books.append(vars(newBook))
@@ -100,8 +100,8 @@ def editBook(id, updatedBook):
         books[index]['isbn'] = int(updatedBook['isbn'])
     if 'price' in updatedBook:
         books[index]['price'] = float(updatedBook['price'])
-    if 'obsolete' in updatedBook:
-        books[index]['obsolete'] = updatedBook['obsolete']
+    if 'isObsolete' in updatedBook:
+        books[index]['isObsolete'] = updatedBook['isObsolete']
     if 'bookType' in updatedBook:
         books[index]['bookType'] = int(updatedBook['bookType'])
 
