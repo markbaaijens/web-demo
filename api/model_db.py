@@ -66,15 +66,16 @@ def getBookById(id):
         sql = 'select Id, ISBN, Name, Obsolete, Price, Booktype from Books where Id = %s;' % (id)
         cur.execute(sql)
         booksFromDb = [cur.fetchone()]
-        newBook = Book (
-            booksFromDb[0]['id'], 
-            booksFromDb[0]['name'],
-            booksFromDb[0]['price'],
-            booksFromDb[0]['isbn'],
-            booksFromDb[0]['obsolete'],
-            booksFromDb[0]['bookType']
-        )
-        returnValue = [vars(newBook)]
+        if booksFromDb != [None]:
+            newBook = Book (
+                booksFromDb[0]['id'], 
+                booksFromDb[0]['name'],
+                booksFromDb[0]['price'],
+                booksFromDb[0]['isbn'],
+                booksFromDb[0]['obsolete'],
+                booksFromDb[0]['bookType']
+            )
+            returnValue = [vars(newBook)]
     finally:
         cur.close()
         con.close()
