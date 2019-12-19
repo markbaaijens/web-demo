@@ -90,6 +90,9 @@ def addBook(newBook):
         cur.execute(sql)
         newId = cur.execute('SELECT last_insert_rowid()')
         con.commit()
+    except sqlite3.Error as error:
+        # TODO Raise exception; in all sql-sections
+        print("Failed to read single row from sqlite table", error)
     finally:
         cur.close()
         con.close()
