@@ -2,6 +2,7 @@ from flask import Flask, jsonify, abort, make_response, request
 
 import logic 
 from config import Config
+import globals
 
 HTTP_OK = 200
 HTTP_CREATED = 201
@@ -34,7 +35,7 @@ def BuildResponse(statusCode, body, location):
 # curl -i http://localhost:5000/api
 @app.route('/api', methods=['GET'])
 def root():
-    return BuildResponse(HTTP_OK, jsonify({'name': 'web-demo'}, {'version': '1.0'}), request.url)
+    return BuildResponse(HTTP_OK, jsonify({'name': 'web-demo'}, {'version': '1.0'}, {'engine': globals.engine}), request.url)
 
 # GET /api/books
 # curl -i http://localhost:5000/api/books

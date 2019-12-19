@@ -3,6 +3,9 @@ from os import path
 import sqlite3
 
 import controller
+import globals
+
+globals.engine = 'sqlite'
 
 # TODO (db) Proper capitalisation of fieldnames
 
