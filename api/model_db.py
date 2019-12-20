@@ -52,6 +52,8 @@ def getAllBooks():
                 book['bookType']
             )
             books.append(vars(newBook))
+    except sqlite3.Error as error:
+        raise Exception(error)
     finally:
         cur.close()
         con.close()
@@ -76,6 +78,8 @@ def getBookById(id):
                 booksFromDb[0]['bookType']
             )
             returnValue = [vars(newBook)]
+    except sqlite3.Error as error:
+        raise Exception(error)            
     finally:
         cur.close()
         con.close()
@@ -91,8 +95,7 @@ def addBook(newBook):
         newId = cur.execute('SELECT last_insert_rowid()')
         con.commit()
     except sqlite3.Error as error:
-        # TODO Raise exception; in all sql-sections
-        print("Failed to read single row from sqlite table", error)
+        raise Exception(error)
     finally:
         cur.close()
         con.close()
@@ -107,6 +110,8 @@ def deleteBook(id):
         sql = 'delete from Books where Id = %s;' % (id)
         cur.execute(sql)
         con.commit()
+    except sqlite3.Error as error:
+        raise Exception(error)
     finally:
         cur.close()
         con.close()
@@ -134,6 +139,8 @@ def editBook(id, updatedBook):
 
         cur.execute(sql)
         con.commit()
+    except sqlite3.Error as error:
+        raise Exception(error)
     finally:
         cur.close()
         con.close()
