@@ -9,7 +9,6 @@ globals.engine = 'sqlite'
 
 # TODO (db) Proper capitalisation of fieldnames
 
-# TODO Strong typed class
 class Book():
     def __init__(self, id=0, name='', price=0, isbn=0, isObsolete=False, bookType=0):
         self.id = id              # Integer
