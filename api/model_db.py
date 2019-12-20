@@ -32,14 +32,14 @@ class Books:
         return editBook(id, updatedBook)
 
 def getAllBooks():
-    con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])
-    con.row_factory = sqlite3.Row
+    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])
+    connection.row_factory = sqlite3.Row
     try:
-        cur = con.cursor()
+        cursor = connection.cursor()
         sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books order by Id;'
-        cur.execute(sql)
+        cursor.execute(sql)
     
-        booksFromDb = cur.fetchall()
+        booksFromDb = cursor.fetchall()
 
         books = []
         for book in booksFromDb:
@@ -55,19 +55,19 @@ def getAllBooks():
     except sqlite3.Error as error:
         raise Exception(error)
     finally:
-        cur.close()
-        con.close()
+        cursor.close()
+        connection.close()
     return books
 
 def getBookById(id):
-    con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])
-    con.row_factory = sqlite3.Row
-    cur = con.cursor()
+    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
     returnValue = []
     try:
         sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books where Id = %s;' % (id)
-        cur.execute(sql)
-        booksFromDb = [cur.fetchone()]
+        cursor.execute(sql)
+        booksFromDb = [cursor.fetchone()]
         if booksFromDb != [None]:
             newBook = Book (
                 booksFromDb[0]['id'], 
@@ -81,45 +81,44 @@ def getBookById(id):
     except sqlite3.Error as error:
         raise Exception(error)            
     finally:
-        cur.close()
-        con.close()
+        cursor.close()
+        connection.close()
 
     return returnValue
 
 def addBook(newBook):
-    con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
-    cur = con.cursor()
+    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
+    cursor = connection.cursor()
     try:
         sql = 'insert into Books (Name, ISBN, Price, IsObsolete, Booktype) values (\'%s\', %d, %f, %s, %d);' % (newBook.name, newBook.isbn, newBook.price, newBook.isObsolete, newBook.bookType)
-        cur.execute(sql)
-        newId = cur.execute('SELECT last_insert_rowid()')
-        con.commit()
+        cursor.execute(sql)
+        cursor.execute('SELECT last_insert_rowid()')
+        newId = cursor.fetchone()[0]
+        connection.commit()
     except sqlite3.Error as error:
         raise Exception(error)
     finally:
-        cur.close()
-        con.close()
-
-    print(newId)
+        cursor.close()
+        connection.close()
     return newId
 
 def deleteBook(id):
-    con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
-    cur = con.cursor()
+    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
+    cursor = connection.cursor()
     try:
         sql = 'delete from Books where Id = %s;' % (id)
-        cur.execute(sql)
-        con.commit()
+        cursor.execute(sql)
+        connection.commit()
     except sqlite3.Error as error:
         raise Exception(error)
     finally:
-        cur.close()
-        con.close()
+        cursor.close()
+        connection.close()
     return
 
 def editBook(id, updatedBook):
-    con = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
-    cur = con.cursor()
+    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
+    cursor = connection.cursor()
     try:
         sql = 'update Books set '
 
@@ -137,12 +136,12 @@ def editBook(id, updatedBook):
 
         sql = sql + ' ' + 'where Id = %d' % (id)
 
-        cur.execute(sql)
-        con.commit()
+        cursor.execute(sql)
+        connection.commit()
     except sqlite3.Error as error:
         raise Exception(error)
     finally:
-        cur.close()
-        con.close()
+        cursor.close()
+        connection.close()
     return
 
