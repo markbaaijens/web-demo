@@ -1,5 +1,5 @@
-#from model_db import Book, Books
-from model_file import Book, Books
+from model_db import Book, Books
+#from model_file import Book, Books
 
 def getAllBooks():
     return Books().All()
@@ -19,8 +19,8 @@ def addBook(newBookData):
     validateISBN(newBook.isbn)
     validateBookType(newBook.bookType)
 
-    # TODO (db) Return new value for Id
-    Books().Add(newBook)
+    newId = Books().Add(newBook)
+    newBook.id = newId
 
     return vars(newBook)
 

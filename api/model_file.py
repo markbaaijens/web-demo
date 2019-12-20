@@ -9,7 +9,6 @@ DATA_FILE_NAME = "./data/book.json"
 
 books = []
 
-# TODO Strong typed class
 class Book():
     def __init__(self, id=0, name='', price=0, isbn=0, isObsolete=False, bookType=0):
         self.id = id              # Integer
@@ -74,7 +73,7 @@ def addBook(newBook):
 
     books.append(vars(newBook))
     saveData()
-    return
+    return id
 
 def deleteBook(id):
     index = 0
