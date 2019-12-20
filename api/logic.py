@@ -1,5 +1,6 @@
-from model_db import Book, Books
-#from model_file import Book, Books
+from model_db import Books
+#from model_file import Books
+from repository import Book
 
 def getAllBooks():
     return Books().All()
