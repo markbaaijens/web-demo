@@ -74,7 +74,7 @@ def addBook(newBook):
 
     books.append(vars(newBook))
     saveData()
-    return
+    return id
 
 def deleteBook(id):
     index = 0
