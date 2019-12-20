@@ -8,7 +8,6 @@ from repository import Book
 
 globals.engine = 'sqlite'
 
-
 class Books:
     def All(self):
         return getAllBooks()
