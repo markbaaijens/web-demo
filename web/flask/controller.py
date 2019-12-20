@@ -173,7 +173,8 @@ def addBook():
         newBook.bookType = request.form['bookType']
 
         # TODO (bug) Error when doing the api-call
-        requests.post(app.config['API_ROOT_URL'] + '/books', json = vars(newBook))
+        addedBook = json.loads(requests.post(app.config['API_ROOT_URL'] + '/books', json = vars(newBook)).content)
+        newBook.id = addedBook['id']
 
         flash('Added book {}'.format(vars(newBook)))
         return redirect('/books')      
