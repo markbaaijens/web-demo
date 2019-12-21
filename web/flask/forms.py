@@ -13,7 +13,7 @@ class EditBookForm(FlaskForm):
     name = StringField('Name')
     price = DecimalField('Price', places=2)
     isbn = IntegerField('ISBN')
-    isObsolete = BooleanField('IsObsolete')
+    isObsolete = BooleanField('Obsolete')
 
     # TODO Use RadioField or SelectField; fill with BookType-enum
     #      bookType = RadioField('Type', choices=[(0, 'Unknown'), (1, 'Fiction'), (2, 'Non-fiction'), (3, 'Educational')])

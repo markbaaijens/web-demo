@@ -5,36 +5,41 @@
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
-            {{ form.id.label }}<br>
-            {{ form.id(size=5) }}
-        </p>
-        <p>
-            {{ form.name.label }}<br>
-            {{ form.name(size=30) }}
-            <!-- Show in ul; smaller, below -->
-            {% for error in form.name.errors %}
-                <br><small><span style="color: red;">[{{ error }}]</span></small>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.price.label }}<br>
-            {{ form.price(size=5) }}
-        </p>
-        <p>
-            {{ form.isbn.label }}<br>
-            {{ form.isbn(size=10) }}
-            {% for error in form.isbn.errors %}
-                <br><small><span style="color: red;">[{{ error }}]</span></small>
-            {% endfor %}
-        </p>    
-        <p>
-            {{ form.isObsolete.label }}<br>
-            {{ form.isObsolete  }}
-        </p>
-        <p>
-            {{ form.bookType.label }}<br>
-            {{ form.bookType }}
-        </p>
+        <table width="350">
+            <tr>
+                <td align="right" width="70">{{ form.id.label }}</td>
+                <td>{{ form.id(size=5) }}</td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">{{ form.name.label }}</td>
+                <td>
+                    {{ form.name(size=30) }}
+                    {% for error in form.name.errors %}
+                        <br><small><span style="color: red;">[{{ error }}]</span></small>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td align="right">{{ form.price.label }}</td>
+                <td>{{ form.price(size=5) }}</td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">{{ form.isbn.label }}</td>
+                <td>
+                    {{ form.isbn(size=5) }}
+                    {% for error in form.isbn.errors %}
+                        <br><small><span style="color: red;">[{{ error }}]</span></small>
+                    {% endfor %}
+                </td     </tr>
+            <tr>
+                <td align="right">{{ form.isObsolete.label }}</td>
+                <td>{{ form.isObsolete }}</td>
+            </tr>
+            <tr>
+                <td align="right">{{ form.bookType.label }}</td>
+                <td>{{ form.bookType(size=5) }}</td>
+            </tr>
+        </table>
         <p>{{ form.submit() }}</p>
     </form>
 {% endblock %}
