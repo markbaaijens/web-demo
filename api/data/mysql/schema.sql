@@ -2,8 +2,6 @@ DROP DATABASE IF EXISTS data;
 CREATE DATABASE data;
 USE data;
 
--- "BookType" CHECK (BookType >= 1 and BookType <= 3) 
-
 CREATE TABLE Books (
 	Id INT NOT NULL AUTO_INCREMENT,
  	Name VARCHAR(30) NOT NULL DEFAULT '',
