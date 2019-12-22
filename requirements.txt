@@ -2,3 +2,4 @@ flask
 requests 
 flask-wtf
 enum
+mysql-connector

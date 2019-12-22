@@ -12,7 +12,7 @@
 # select * from CHECK_CONSTRAINTS;
 # exit
 
-# TODO Create DB from app: https://flask.palletsprojects.com/en/1.1.x/patterns/sqlite3/
+# TODO Create DB from app: https://www.w3schools.com/python/python_mysql_create_db.asp
 
 mysql -h localhost -u debian-sys-maint -p < schema.sql
 mysql -h localhost -u debian-sys-maint -p < populate.sql

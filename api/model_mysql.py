@@ -1,12 +1,19 @@
 import json
 from os import path
-import sqlite3
+import mysql.connector
 
 import controller
 import globals
 from repository import Book
 
 globals.engine = 'mysql'
+
+def createConnection():
+    return mysql.connector.connect(
+        host = controller.app.Config['MYSQL_HOST'],
+        user = controller.app.Config['MYSQL_USER'],
+        passwd = controller.app.Config['MYSQL_PASSWORD']
+    )
 
 class Books:
     def All(self):
@@ -21,8 +28,7 @@ class Books:
         return editBook(id, updatedBook)
 
 def getAllBooks():
-    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])
-    connection.row_factory = sqlite3.Row
+    connection = createConnection()
     try:
         cursor = connection.cursor()
         sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books order by Id;'
@@ -41,7 +47,7 @@ def getAllBooks():
                 book['bookType']
             )
             books.append(vars(newBook))
-    except sqlite3.Error as error:
+    except mysql.connector.Error as error:
         raise Exception(error)
     finally:
         cursor.close()
@@ -49,8 +55,7 @@ def getAllBooks():
     return books
 
 def getBookById(id):
-    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])
-    connection.row_factory = sqlite3.Row
+    connection = createConnection()
     cursor = connection.cursor()
     returnValue = []
     try:
@@ -67,7 +72,7 @@ def getBookById(id):
                 booksFromDb[0]['bookType']
             )
             returnValue = [vars(newBook)]
-    except sqlite3.Error as error:
+    except mysql.connector.Error as error:
         raise Exception(error)            
     finally:
         cursor.close()
@@ -76,7 +81,7 @@ def getBookById(id):
     return returnValue
 
 def addBook(newBook):
-    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
+    connection = createConnection()
     cursor = connection.cursor()
     try:
         sql = 'insert into Books (Name, ISBN, Price, IsObsolete, Booktype) values (\'%s\', %d, %f, %s, %d);' % (newBook.name, newBook.isbn, newBook.price, newBook.isObsolete, newBook.bookType)
@@ -84,7 +89,7 @@ def addBook(newBook):
         cursor.execute('SELECT last_insert_rowid()')
         newId = cursor.fetchone()[0]
         connection.commit()
-    except sqlite3.Error as error:
+    except mysql.connector.Error as error:
         raise Exception(error)
     finally:
         cursor.close()
@@ -92,13 +97,13 @@ def addBook(newBook):
     return newId
 
 def deleteBook(id):
-    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
+    connection = createConnection()
     cursor = connection.cursor()
     try:
         sql = 'delete from Books where Id = %s;' % (id)
         cursor.execute(sql)
         connection.commit()
-    except sqlite3.Error as error:
+    except mysql.connector.Error as error:
         raise Exception(error)
     finally:
         cursor.close()
@@ -106,7 +111,7 @@ def deleteBook(id):
     return
 
 def editBook(id, updatedBook):
-    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
+    connection = createConnection()
     cursor = connection.cursor()
     try:
         sql = 'update Books set '
@@ -127,7 +132,7 @@ def editBook(id, updatedBook):
 
         cursor.execute(sql)
         connection.commit()
-    except sqlite3.Error as error:
+    except mysql.connector.Error as error:
         raise Exception(error)
     finally:
         cursor.close()
