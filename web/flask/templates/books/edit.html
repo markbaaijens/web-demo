@@ -11,7 +11,7 @@
                 <td>{{ form.id(size=5) }}</td>
             </tr>
             <tr>
-                <td align="right" valign="top">{{ form.name.label }}</td>
+                <td align="right">{{ form.name.label }}</td>
                 <td>
                     {{ form.name(size=30) }}
                     {% for error in form.name.errors %}
@@ -24,7 +24,7 @@
                 <td>{{ form.price(size=5) }}</td>
             </tr>
             <tr>
-                <td align="right" valign="top">{{ form.isbn.label }}</td>
+                <td align="right">{{ form.isbn.label }}</td>
                 <td>
                     {{ form.isbn(size=5) }}
                     {% for error in form.isbn.errors %}
