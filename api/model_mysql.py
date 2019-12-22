@@ -10,9 +10,10 @@ globals.engine = 'mysql'
 
 def createConnection():
     return mysql.connector.connect(
-        host = controller.app.Config['MYSQL_HOST'],
-        user = controller.app.Config['MYSQL_USER'],
-        passwd = controller.app.Config['MYSQL_PASSWORD']
+        host = controller.app.config['MYSQL_HOST'],
+        user = controller.app.config['MYSQL_USER'],
+        passwd = controller.app.config['MYSQL_PASSWORD'],
+        database = controller.app.config['MYSQL_DATABASE'],
     )
 
 class Books:
@@ -33,7 +34,7 @@ def getAllBooks():
         cursor = connection.cursor()
         sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books order by Id;'
         cursor.execute(sql)
-    
+
         booksFromDb = cursor.fetchall()
 
         books = []
