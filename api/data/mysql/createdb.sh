@@ -16,5 +16,5 @@
 
 mysql -h localhost -u debian-sys-maint -p < schema.sql
  
-# TODO sqlite3 $DBFILE < populate.sql
+mysql -h localhost -u debian-sys-maint -p < populate.sql
 
