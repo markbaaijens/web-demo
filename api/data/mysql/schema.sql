@@ -13,6 +13,3 @@ CREATE TABLE Books (
 	CONSTRAINT CHK_BookType CHECK (BookType in (1, 2, 3))
 );
 CREATE INDEX IdIndex ON Books(Id);
-
-
-
