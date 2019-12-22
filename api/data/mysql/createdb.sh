@@ -15,6 +15,5 @@
 # TODO Create DB from app: https://flask.palletsprojects.com/en/1.1.x/patterns/sqlite3/
 
 mysql -h localhost -u debian-sys-maint -p < schema.sql
- 
 mysql -h localhost -u debian-sys-maint -p < populate.sql
 
