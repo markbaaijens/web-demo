@@ -2,4 +2,5 @@ flask
 requests 
 flask-wtf
 enum
-mysql-connector-python
+mysql-connector-python  # Solves the authentication issue with mysql-connector
+simplejson  # Solves the issue of mysql returning Decimal()

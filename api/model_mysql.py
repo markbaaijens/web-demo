@@ -32,7 +32,7 @@ def getAllBooks():
     connection = createConnection()
     try:
         cursor = connection.cursor()
-        sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books order by Id;'
+        sql = 'select Id, ISBN, Name, Price, IsObsolete, Booktype from Books order by Id;'
         cursor.execute(sql)
 
         booksFromDb = cursor.fetchall()
@@ -40,12 +40,12 @@ def getAllBooks():
         books = []
         for book in booksFromDb:
             newBook = Book (
-                book['id'], 
-                book['name'],
-                book['price'],
-                book['isbn'],
-                book['isObsolete'],
-                book['bookType']
+                book[0], # Id
+                book[1], # Name
+                book[2], # Price
+                book[3], # ISBN
+                book[4], # IsObsolete
+                book[5]  # BookType
             )
             books.append(vars(newBook))
     except mysql.connector.Error as error:
