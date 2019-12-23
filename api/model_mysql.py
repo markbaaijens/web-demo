@@ -32,7 +32,7 @@ def getAllBooks():
     connection = createConnection()
     try:
         cursor = connection.cursor()
-        # Fields MUST be in this order to provide extraction (only MySQL)        
+        # Fields MUST be in this order to provide proper extraction (only MySQL)        
         sql = 'select Id, Name, Price, ISBN, IsObsolete, Booktype from Books order by Id;'
         cursor.execute(sql)
 
@@ -62,7 +62,7 @@ def getBookById(id):
     cursor = connection.cursor()
     returnValue = []
     try:
-        # Fields MUST be in this order to provide extraction (only MySQL)        
+        # Fields MUST be in this order to provide proper extraction (only MySQL)        
         sql = 'select Id, Name, Price, ISBN, IsObsolete, Booktype from Books where Id = %s;' % (id)
         cursor.execute(sql)
         booksFromDb = [cursor.fetchone()]        
