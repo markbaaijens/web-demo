@@ -6,6 +6,7 @@
 # mysql -h localhost -u debian-sys-maint -p
 # Password: OX2VZ4XPu8tVWHYx
 # show databases;
+# use data;
 # describe Books;
 # show index from Books;
 # use information_schema;

@@ -12,4 +12,4 @@ CREATE TABLE Books (
  	PRIMARY KEY (Id),
 	CONSTRAINT CHK_BookType CHECK (BookType in (1, 2, 3))
 );
-CREATE INDEX IdIndex ON Books(Id);
+CREATE INDEX IDX_Books_Id ON Books(Id);
