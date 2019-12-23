@@ -13,14 +13,14 @@ Python packages
 Start API
 - cd api
 - python controller.py
-Access: localhost:5000
+=> localhost:5000
 
 Start webserver:
 - cd web/flask
 - python controller.py
-Access (browser): localhost:5001
+=> (browser) localhost:5001
 
 ## Documentation
-General https://github.com/markbaaijens/web-demo/wiki
-Todo's https://github.com/markbaaijens/web-demo/wiki/Todo
-Roadmap https://github.com/markbaaijens/web-demo/wiki/Roadmap
+- General https://github.com/markbaaijens/web-demo/wiki
+- Todo's https://github.com/markbaaijens/web-demo/wiki/Todo
+- Roadmap https://github.com/markbaaijens/web-demo/wiki/Roadmap
