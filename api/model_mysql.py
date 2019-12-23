@@ -91,7 +91,7 @@ def addBook(newBook):
     try:
         sql = 'insert into Books (Name, ISBN, Price, IsObsolete, Booktype) values (\'%s\', %d, %f, %s, %d);' % (newBook.name, newBook.isbn, newBook.price, newBook.isObsolete, newBook.bookType)
         cursor.execute(sql)
-        cursor.execute('SELECT last_insert_rowid()')
+        cursor.execute('SELECT LAST_INSERT_ID();')
         newId = cursor.fetchone()[0]
         connection.commit()
     except mysql.connector.Error as error:
