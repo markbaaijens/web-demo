@@ -32,6 +32,7 @@ def getAllBooks():
     connection = createConnection()
     try:
         cursor = connection.cursor()
+        # Fields MUST be in this order to provide extraction (only MySQL)        
         sql = 'select Id, Name, Price, ISBN, IsObsolete, Booktype from Books order by Id;'
         cursor.execute(sql)
 
@@ -39,10 +40,11 @@ def getAllBooks():
 
         books = []
         for book in booksFromDb:
+            # TODO (mysql) Access result by name, just like sqlite
             newBook = Book (
                 book[0], # Id
                 book[1], # Name
-                book[2], # Price
+                book[2], # Price; use simplejson for correct conversion of decimals
                 book[3], # ISBN
                 book[4], # IsObsolete
                 book[5]  # BookType
@@ -60,17 +62,19 @@ def getBookById(id):
     cursor = connection.cursor()
     returnValue = []
     try:
-        sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books where Id = %s;' % (id)
+        # Fields MUST be in this order to provide extraction (only MySQL)        
+        sql = 'select Id, Name, Price, ISBN, IsObsolete, Booktype from Books where Id = %s;' % (id)
         cursor.execute(sql)
-        booksFromDb = [cursor.fetchone()]
+        booksFromDb = [cursor.fetchone()]        
+
         if booksFromDb != [None]:
             newBook = Book (
-                booksFromDb[0]['id'], 
-                booksFromDb[0]['name'],
-                booksFromDb[0]['price'],
-                booksFromDb[0]['isbn'],
-                booksFromDb[0]['isObsolete'],
-                booksFromDb[0]['bookType']
+                booksFromDb[0][0], # Id
+                booksFromDb[0][1], # Name
+                booksFromDb[0][2], # Price; use simplejson for correct conversion of decimals
+                booksFromDb[0][3], # ISBN
+                booksFromDb[0][4], # IsObsolete
+                booksFromDb[0][5]  # BookType
             )
             returnValue = [vars(newBook)]
     except mysql.connector.Error as error:

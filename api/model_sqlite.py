@@ -57,8 +57,9 @@ def getBookById(id):
     cursor = connection.cursor()
     returnValue = []
     try:
-        sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books where Id = %s;' % (id)
+        sql = 'select Id, Name, Price, ISBN, IsObsolete, Booktype from Books where Id = %s;' % (id)
         cursor.execute(sql)
+        
         booksFromDb = [cursor.fetchone()]
         if booksFromDb != [None]:
             newBook = Book (
