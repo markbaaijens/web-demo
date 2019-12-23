@@ -32,7 +32,7 @@ def getAllBooks():
     connection = createConnection()
     try:
         cursor = connection.cursor()
-        sql = 'select Id, ISBN, Name, Price, IsObsolete, Booktype from Books order by Id;'
+        sql = 'select Id, Name, Price, ISBN, IsObsolete, Booktype from Books order by Id;'
         cursor.execute(sql)
 
         booksFromDb = cursor.fetchall()

@@ -28,7 +28,7 @@ def getAllBooks():
     connection.row_factory = sqlite3.Row
     try:
         cursor = connection.cursor()
-        sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books order by Id;'
+        sql = 'select Id, Name, Price, ISBN, IsObsolete, Booktype from Books order by Id;'
         cursor.execute(sql)
     
         booksFromDb = cursor.fetchall()
