@@ -22,12 +22,11 @@ logger.setLevel(logging.DEBUG)
 fileHandler = logging.handlers.RotatingFileHandler(app.config['LOG_FILE'], 'a', 1024000, 10)
 fileHandler.setLevel(logging.DEBUG)
 fileHandler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+logger.addHandler(fileHandler)
 
 consoleHandler = logging.StreamHandler()
 consoleHandler.setLevel(logging.DEBUG)
-consoleHandler.setFormatter(logging.Formatter('%(levelname)s %(message)s'))
-
-logger.addHandler(fileHandler)
+consoleHandler.setFormatter(logging.Formatter('%(message)s'))
 logger.addHandler(consoleHandler)
 
 @app.errorhandler(HTTP_NOT_FOUND)
