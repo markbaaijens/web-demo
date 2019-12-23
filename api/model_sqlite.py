@@ -4,19 +4,12 @@ import sqlite3
 
 import controller
 import globals
+from repository import Book
 
 globals.engine = 'sqlite'
 
-# TODO (db) Proper capitalisation of fieldnames
-
-class Book():
-    def __init__(self, id=0, name='', price=0, isbn=0, isObsolete=False, bookType=0):
-        self.id = id              # Integer
-        self.name = name          # String(30)
-        self.price = price        # Numeric
-        self.isbn = isbn          # Integer
-        self.isObsolete = isObsolete  # Boolean
-        self.bookType = bookType  # Enum: 0 = Unknown, 1 = fiction, 2 = non-fiction, 3 = educational    
+def createConnection():
+    return sqlite3.connect(controller.app.config['SQLITE_FILE_NAME'])
 
 class Books:
     def All(self):
@@ -31,11 +24,11 @@ class Books:
         return editBook(id, updatedBook)
 
 def getAllBooks():
-    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])
+    connection = createConnection()
     connection.row_factory = sqlite3.Row
     try:
         cursor = connection.cursor()
-        sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books order by Id;'
+        sql = 'select Id, Name, Price, ISBN, IsObsolete, Booktype from Books order by Id;'
         cursor.execute(sql)
     
         booksFromDb = cursor.fetchall()
@@ -59,13 +52,14 @@ def getAllBooks():
     return books
 
 def getBookById(id):
-    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])
+    connection = createConnection()
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
     returnValue = []
     try:
-        sql = 'select Id, ISBN, Name, IsObsolete, Price, Booktype from Books where Id = %s;' % (id)
+        sql = 'select Id, Name, Price, ISBN, IsObsolete, Booktype from Books where Id = %s;' % (id)
         cursor.execute(sql)
+        
         booksFromDb = [cursor.fetchone()]
         if booksFromDb != [None]:
             newBook = Book (
@@ -86,7 +80,7 @@ def getBookById(id):
     return returnValue
 
 def addBook(newBook):
-    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
+    connection = createConnection()
     cursor = connection.cursor()
     try:
         sql = 'insert into Books (Name, ISBN, Price, IsObsolete, Booktype) values (\'%s\', %d, %f, %s, %d);' % (newBook.name, newBook.isbn, newBook.price, newBook.isObsolete, newBook.bookType)
@@ -102,7 +96,7 @@ def addBook(newBook):
     return newId
 
 def deleteBook(id):
-    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
+    connection = createConnection()
     cursor = connection.cursor()
     try:
         sql = 'delete from Books where Id = %s;' % (id)
@@ -116,7 +110,7 @@ def deleteBook(id):
     return
 
 def editBook(id, updatedBook):
-    connection = sqlite3.connect(controller.app.config['DB_FILE_NAME'])   
+    connection = createConnection()
     cursor = connection.cursor()
     try:
         sql = 'update Books set '
