@@ -32,7 +32,7 @@ def getAllBooks():
     connection = createConnection()
     try:
         cursor = connection.cursor()
-        # Fields MUST be in this order to provide proper extraction (only MySQL)        
+        # Fields MUST be in this order to provide proper extraction (only mysql)        
         sql = 'select Id, Name, Price, ISBN, IsObsolete, Booktype from Books order by Id;'
         cursor.execute(sql)
 
@@ -44,7 +44,7 @@ def getAllBooks():
             newBook = Book (
                 book[0], # Id
                 book[1], # Name
-                book[2], # Price; use simplejson for correct conversion of decimals
+                book[2], # Price; use simplejson for correct conversion of decimals (mysql)
                 book[3], # ISBN
                 book[4], # IsObsolete
                 book[5]  # BookType
@@ -62,7 +62,7 @@ def getBookById(id):
     cursor = connection.cursor()
     returnValue = []
     try:
-        # Fields MUST be in this order to provide proper extraction (only MySQL)        
+        # Fields MUST be in this order to provide proper extraction (only mysql)        
         sql = 'select Id, Name, Price, ISBN, IsObsolete, Booktype from Books where Id = %s;' % (id)
         cursor.execute(sql)
         booksFromDb = [cursor.fetchone()]        
@@ -71,7 +71,7 @@ def getBookById(id):
             newBook = Book (
                 booksFromDb[0][0], # Id
                 booksFromDb[0][1], # Name
-                booksFromDb[0][2], # Price; use simplejson for correct conversion of decimals
+                booksFromDb[0][2], # Price; use simplejson for correct conversion of decimals (mysql)
                 booksFromDb[0][3], # ISBN
                 booksFromDb[0][4], # IsObsolete
                 booksFromDb[0][5]  # BookType
