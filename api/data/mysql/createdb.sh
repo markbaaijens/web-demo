@@ -3,8 +3,8 @@
 # ./createdb.sh
 
 # (check)
-# mysql -h localhost -u <user_name> -p
-# Password: <password>
+# mysql -h localhost -u debian-sys-maint -p
+# Password: OX2VZ4XPu8tVWHYx
 # show databases;
 # use data;
 # describe Books;
@@ -15,8 +15,6 @@
 
 # TODO Create DB from app: https://www.w3schools.com/python/python_mysql_create_db.asp
 
-user_name="debian-sys-maint"
-password="OX2VZ4XPu8tVWHYx"
+mysql -h localhost -u debian-sys-maint -p < schema.sql
+mysql -h localhost -u debian-sys-maint -p < populate.sql
 
-mysql -h localhost -u $user_name -p$password < schema.sql
-mysql -h localhost -u $user_name -p$password < populate.sql
