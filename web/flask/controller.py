@@ -1,4 +1,12 @@
+# TODO logging: https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-error-handling
+# TODO - create logs folders runtime (delete info.txt files)
+#        if not os.path.exists('logs'):
+#           os.mkdir('logs')
+# TODO - choose console-logging OR file-logging based on debug-modus
+#        if not app.debug:
 # TODO Exception handling API-calls (based on return codes op calls) 
+# TODO see: https://flask.palletsprojects.com/en/1.1.x/patterns/apierrors/
+
 from flask import Flask, render_template, jsonify, request, redirect, flash
 import requests
 import json
