@@ -21,7 +21,8 @@ logger = logging.getLogger()
 if not logger.handlers:
     logger.setLevel(logging.DEBUG)
 
-    fileHandler = logging.handlers.RotatingFileHandler(app.config['LOG_FILE'], 'a', 1024000, 10)
+    fileHandler = logging.handlers.RotatingFileHandler(
+        app.config['LOG_FILE_NAME'], 'a', app.config['LOG_MAX_SIZE'], app.config['LOG_BACKUP_COUNT'])
     fileHandler.setLevel(logging.DEBUG)
     fileHandler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
     logger.addHandler(fileHandler)
