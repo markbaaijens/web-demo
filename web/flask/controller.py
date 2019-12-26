@@ -6,6 +6,8 @@
 #        if not app.debug:
 # TODO Exception handling API-calls (based on return codes op calls) 
 # TODO see: https://flask.palletsprojects.com/en/1.1.x/patterns/apierrors/
+# TODO Error when page (or id) not found
+# TODO Error when service not found when doing a request
 
 from flask import Flask, render_template, jsonify, request, redirect, flash
 import requests
@@ -37,8 +39,6 @@ if not logger.handlers:
     consoleHandler.setLevel(logging.DEBUG)
     consoleHandler.setFormatter(logging.Formatter('%(message)s'))
     logger.addHandler(consoleHandler)
-
-# TODO Error when page (or id) not found
 
 # Globals
 apiInfo = []
@@ -171,7 +171,6 @@ def editBook(id):
             deltaBook['bookType'] = newBookType
 
         if deltaBook != {}:
-            # TODO (bug) Error when doing the api-call
             try:
                 requests.patch(app.config['API_ROOT_URL'] + '/books' + '/' + str(id), json = deltaBook)
                 flash('Saved book {}'.format(deltaBook))
@@ -209,7 +208,6 @@ def addBook():
         newBook.isObsolete = form.isObsolete.data # TODO (bug) request.form['<booelan>'] does not return
         newBook.bookType = request.form['bookType']
 
-        # TODO (bug) Error when doing the api-call
         try:
             addedBook = json.loads(requests.post(app.config['API_ROOT_URL'] + '/books', json = vars(newBook)).content)
             newBook.id = addedBook['id']
