@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, abort, make_response, request
 import logging
 from logging.handlers import RotatingFileHandler
+import traceback
 
 import logic 
 from config import Config
@@ -61,6 +62,7 @@ def getBooks():
         books = logic.getAllBooks()
     except Exception as e:
         logger.error(e)
+        logger.error(traceback.format_exc())
         return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
 
     return BuildResponse(HTTP_OK, jsonify(books), request.url)
@@ -73,6 +75,7 @@ def getBookById(id):
         book = logic.getBookById(id)
     except Exception as e:
         logger.error(e)
+        logger.error(traceback.format_exc())
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
     
     if len(book) == 0:
@@ -89,7 +92,8 @@ def addBook():
     try:
         newBook = logic.addBook(request.json)
     except Exception as e:
-        logger.error(e)
+        logger.error(e)        
+        logger.error(traceback.format_exc())
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
     
     return BuildResponse(HTTP_CREATED, jsonify(newBook), request.url)
@@ -111,6 +115,7 @@ def editBook(id):
         logic.editBook(id, requestData) 
     except Exception as e:
         logger.error(e)
+        logger.error(traceback.format_exc())
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
 
     return BuildResponse(HTTP_OK, jsonify(requestData), request.url)
@@ -127,6 +132,7 @@ def deleteBook(id):
         logic.deleteBook(id)
     except Exception as e:
         logger.error(e)
+        logger.error(traceback.format_exc())
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
     return BuildResponse(HTTP_OK, '', request.url)
 

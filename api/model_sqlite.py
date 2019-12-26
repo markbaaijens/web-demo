@@ -1,7 +1,6 @@
 import json
 from os import path
 import sqlite3
-import traceback
 
 import controller
 import globals
@@ -46,7 +45,6 @@ def getAllBooks():
             )
             books.append(vars(newBook))
     except sqlite3.Error as error:
-        controller.logger.error(traceback.format_exc())
         raise Exception(error)
     finally:
         cursor.close()
@@ -74,7 +72,6 @@ def getBookById(id):
             )
             returnValue = [vars(newBook)]
     except sqlite3.Error as error:
-        controller.logger.error(traceback.format_exc())
         raise Exception(error)            
     finally:
         cursor.close()
@@ -92,7 +89,6 @@ def addBook(newBook):
         newId = cursor.fetchone()[0]
         connection.commit()
     except sqlite3.Error as error:
-        controller.logger.error(error)
         raise Exception(error)
     finally:
         cursor.close()
@@ -107,7 +103,6 @@ def deleteBook(id):
         cursor.execute(sql)
         connection.commit()
     except sqlite3.Error as error:
-        controller.logger.error(traceback.format_exc())
         raise Exception(error)
     finally:
         cursor.close()
@@ -137,7 +132,6 @@ def editBook(id, updatedBook):
         cursor.execute(sql)
         connection.commit()
     except sqlite3.Error as error:
-        controller.logger.error(traceback.format_exc())
         raise Exception(error)
     finally:
         cursor.close()
