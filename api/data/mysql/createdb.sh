@@ -15,8 +15,9 @@
 
 # TODO Create DB from app: https://www.w3schools.com/python/python_mysql_create_db.asp
 
+server="localhost"
 user_name="debian-sys-maint"
 password="OX2VZ4XPu8tVWHYx"
 
-mysql -h localhost -u $user_name -p$password < schema.sql
-mysql -h localhost -u $user_name -p$password < populate.sql
+mysql -h $server -u $user_name -p$password < schema.sql
+mysql -h $server -u $user_name -p$password < populate.sql
