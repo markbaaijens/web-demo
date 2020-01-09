@@ -4,3 +4,4 @@ flask-wtf
 enum
 mysql-connector-python  # Solves the authentication issue with mysql-connector
 simplejson  # Solves the issue of mysql returning Decimal()
+flask-cors  # To enable http over different domains
