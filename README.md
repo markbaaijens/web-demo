@@ -8,7 +8,7 @@ OS:
 - sqlite3 (apt install sqlite3)
 
 Python packages
-- pip install -r requirements.txt
+- pip3 install -r requirements.txt
 
 ## Configuration
 
@@ -32,12 +32,12 @@ Python packages
 ## Run application
 Start API
 - cd api
-- python controller.py
+- python3 controller.py
 => localhost:5000
 
 Start webserver:
 - cd web/flask
-- python controller.py
+- python3 controller.py
 => (browser) localhost:5001
 
 ## Documentation
