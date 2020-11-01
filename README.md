@@ -15,13 +15,13 @@ Python packages
 ### Choose the desired data-model
 - comment or uncomment in api/logic.py the desired model
 
-### Create sqlite-database (optional)
+### Create sqlite database (optional)
 - $ cd api/data/sqlite
 - $ chmod +x createdb.sh
 - $ ./createdb.sh
 - (database 'data.db' is created in api/data)
 
-### Create sqlite-database (optional)
+### Create MySQL database (optional)
 - (setup a mysql-server with a admin-user)
 - $ cd api/data/mysql
 - (modify createdb.sh: replace server, user_name and password)
