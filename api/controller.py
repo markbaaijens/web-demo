@@ -2,6 +2,7 @@ from flask import Flask, jsonify, abort, make_response, request
 import logging
 from logging.handlers import RotatingFileHandler
 import traceback
+from flask_cors import CORS
 
 import logic 
 from config import Config
@@ -14,6 +15,7 @@ HTTP_NOT_FOUND = 404
 HTTP_METHOD_NOT_ALLOWED = 405
 
 app = Flask(__name__)
+CORS(app)  # To enable http over different domains
 
 app.config.from_object(Config)
 
