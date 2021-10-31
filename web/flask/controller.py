@@ -1,7 +1,20 @@
+# TODO logging: https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-error-handling
+# TODO - create logs folders runtime (delete info.txt files)
+#        if not os.path.exists('logs'):
+#           os.mkdir('logs')
+# TODO - choose console-logging OR file-logging based on debug-modus
+#        if not app.debug:
 # TODO Exception handling API-calls (based on return codes op calls) 
+# TODO see: https://flask.palletsprojects.com/en/1.1.x/patterns/apierrors/
+# TODO Error when page (or id) not found
+# TODO Error when service not found when doing a request
+
 from flask import Flask, render_template, jsonify, request, redirect, flash
 import requests
 import json
+import logging
+from logging.handlers import RotatingFileHandler
+import traceback
 
 from config import Config
 from forms import EditBookForm, DeleteBookForm
@@ -12,7 +25,20 @@ app = Flask(__name__)
 
 app.config.from_object(Config)
 
-# TODO Error when page (or id) not found
+logger = logging.getLogger()
+if not logger.handlers:
+    logger.setLevel(logging.DEBUG)
+
+    fileHandler = logging.handlers.RotatingFileHandler(
+        app.config['LOG_FILE_NAME'], 'a', app.config['LOG_MAX_SIZE'], app.config['LOG_BACKUP_COUNT'])
+    fileHandler.setLevel(logging.DEBUG)
+    fileHandler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+    logger.addHandler(fileHandler)
+
+    consoleHandler = logging.StreamHandler()
+    consoleHandler.setLevel(logging.DEBUG)
+    consoleHandler.setFormatter(logging.Formatter('%(message)s'))
+    logger.addHandler(consoleHandler)
 
 # Globals
 apiInfo = []
@@ -22,7 +48,9 @@ def getApiInfo():
         # Using eval to convert string to a dictionairy
         apiInfo = json.loads(requests.get(app.config['API_ROOT_URL']).content)
         apiInfo.append({"url": app.config['API_ROOT_URL']})
-    except:
+    except Exception as e:
+        logger.error(e)
+        logger.error(traceback.format_exc())
         apiInfo = []
 
     return apiInfo
@@ -31,7 +59,6 @@ def getApiInfo():
 @app.route('/', methods=['GET'])
 def index():
     global apiInfo
-
     return render_template('index.html', appTitle = app.config['APP_TITLE'], api = apiInfo)
 
 # GET /books
@@ -42,7 +69,9 @@ def listBook():
     try:
         # Using eval to convert string to a dictionairy
         bookList = json.loads(requests.get(app.config['API_ROOT_URL'] + '/books').content)
-    except:
+    except Exception as e:
+        logger.error(e)
+        logger.error(traceback.format_exc())
         bookList = []
 
     nrOfBooks = len(bookList)  # Count books client-side
@@ -64,7 +93,9 @@ def detailsBook(id):
     try:
         # Using eval to convert string to a dictionairy
         bookList = json.loads(requests.get(app.config['API_ROOT_URL'] + '/books' + '/' + str(id)).content)
-    except:
+    except Exception as e:
+        logger.error(e)
+        logger.error(traceback.format_exc())        
         bookList = []  
 
     for book in bookList:  
@@ -92,7 +123,9 @@ def editBook(id):
     try:
         # Using eval to convert string to a dictionairy
         bookList = json.loads(requests.get(app.config['API_ROOT_URL'] + '/books' + '/' + str(id)).content)
-    except:
+    except Exception as e:
+        logger.error(e)
+        logger.error(traceback.format_exc())
         bookList = []  
 
     for book in bookList:  
@@ -138,10 +171,13 @@ def editBook(id):
             deltaBook['bookType'] = newBookType
 
         if deltaBook != {}:
-            # TODO (bug) Error when doing the api-call
-            requests.patch(app.config['API_ROOT_URL'] + '/books' + '/' + str(id), json = deltaBook)
-            flash('Saved book {}'.format(deltaBook))
-
+            try:
+                requests.patch(app.config['API_ROOT_URL'] + '/books' + '/' + str(id), json = deltaBook)
+                flash('Saved book {}'.format(deltaBook))
+            except Exception as e:
+                logger.error(e)
+                logger.error(traceback.format_exc())
+            
         # TODO After insert, redirect to book-details            
         return redirect('/books/' + str(id))     
 
@@ -172,11 +208,14 @@ def addBook():
         newBook.isObsolete = form.isObsolete.data # TODO (bug) request.form['<booelan>'] does not return
         newBook.bookType = request.form['bookType']
 
-        # TODO (bug) Error when doing the api-call
-        addedBook = json.loads(requests.post(app.config['API_ROOT_URL'] + '/books', json = vars(newBook)).content)
-        newBook.id = addedBook['id']
+        try:
+            addedBook = json.loads(requests.post(app.config['API_ROOT_URL'] + '/books', json = vars(newBook)).content)
+            newBook.id = addedBook['id']
+            flash('Added book {}'.format(vars(newBook)))
+        except Exception as e:
+            logger.error(e)
+            logger.error(traceback.format_exc())
 
-        flash('Added book {}'.format(vars(newBook)))
         return redirect('/books')      
 
     return render_template('books/edit.html', actionTitle = 'Add book', appTitle = app.config['APP_TITLE'], api = apiInfo, book = vars(orgBook), form = form)
@@ -188,7 +227,9 @@ def deleteBook(id):
 
     try:
         bookList = json.loads(requests.get(app.config['API_ROOT_URL'] + '/books' + '/' + str(id)).content)
-    except:
+    except Exception as e:
+        logger.error(e)
+        logger.error(traceback.format_exc())
         bookList = []  
 
     for book in bookList:  
@@ -207,6 +248,9 @@ def deleteBook(id):
     return render_template('books/delete.html', actionTitle = 'Delete book', appTitle = app.config['APP_TITLE'], api = apiInfo, book = vars(orgBook), form = form)
 
 if __name__ == '__main__':
+    logger.debug('App Started')
     apiInfo = getApiInfo()
     app.run(port=5001, debug=True)  # auto-reload, only localhoast
 #    app.run(host='0.0.0.0', port=5001)  # public server, reachable from remote
+    logger.debug('App Stopped')
+

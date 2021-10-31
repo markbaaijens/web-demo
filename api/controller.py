@@ -1,4 +1,7 @@
 from flask import Flask, jsonify, abort, make_response, request
+import logging
+from logging.handlers import RotatingFileHandler
+import traceback
 from flask_cors import CORS
 
 import logic 
@@ -15,6 +18,21 @@ app = Flask(__name__)
 CORS(app)  # To enable http over different domains
 
 app.config.from_object(Config)
+
+logger = logging.getLogger()
+if not logger.handlers:
+    logger.setLevel(logging.DEBUG)
+
+    fileHandler = logging.handlers.RotatingFileHandler(
+        app.config['LOG_FILE_NAME'], 'a', app.config['LOG_MAX_SIZE'], app.config['LOG_BACKUP_COUNT'])
+    fileHandler.setLevel(logging.DEBUG)
+    fileHandler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+    logger.addHandler(fileHandler)
+
+    consoleHandler = logging.StreamHandler()
+    consoleHandler.setLevel(logging.DEBUG)
+    consoleHandler.setFormatter(logging.Formatter('%(message)s'))
+    logger.addHandler(consoleHandler)
 
 @app.errorhandler(HTTP_NOT_FOUND)
 def notFoundError(error):
@@ -46,6 +64,8 @@ def getBooks():
     try:
         books = logic.getAllBooks()
     except Exception as e:
+        logger.error(e)
+        logger.error(traceback.format_exc())
         return make_response(jsonify({'message': str(e) }), HTTP_BAD_REQUEST)
 
     return BuildResponse(HTTP_OK, jsonify(books), request.url)
@@ -57,6 +77,8 @@ def getBookById(id):
     try:
         book = logic.getBookById(id)
     except Exception as e:
+        logger.error(e)
+        logger.error(traceback.format_exc())
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
     
     if len(book) == 0:
@@ -73,6 +95,8 @@ def addBook():
     try:
         newBook = logic.addBook(request.json)
     except Exception as e:
+        logger.error(e)        
+        logger.error(traceback.format_exc())
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
     
     return BuildResponse(HTTP_CREATED, jsonify(newBook), request.url)
@@ -93,6 +117,8 @@ def editBook(id):
     try:
         logic.editBook(id, requestData) 
     except Exception as e:
+        logger.error(e)
+        logger.error(traceback.format_exc())
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
 
     return BuildResponse(HTTP_OK, jsonify(requestData), request.url)
@@ -108,10 +134,15 @@ def deleteBook(id):
     try:
         logic.deleteBook(id)
     except Exception as e:
+        logger.error(e)
+        logger.error(traceback.format_exc())
         return BuildResponse(HTTP_BAD_REQUEST, jsonify({'message': str(e)}), request.url)
     return BuildResponse(HTTP_OK, '', request.url)
 
 if __name__ == '__main__':
+    logger.debug('App Started')
     app.run(port=5000, debug=True)  # auto-reload, only localhoast
 #    app.run(host='0.0.0.0', port=5000)  # public server, reachable from remote
+    logger.debug('App Stopped')
+
 
